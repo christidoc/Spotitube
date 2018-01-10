@@ -1,6 +1,6 @@
 package datasource;
 
-import datasource.dto.TrackDTO;
+import domain.Track;
 
 import java.util.List;
 
@@ -8,13 +8,13 @@ import java.util.List;
  * Created by Christiaan on 26-11-2017.
  */
 public interface TrackDAO {
-    List<TrackDTO> getAllTracks();
+    List<Track> getAllTracks();
 
-    List<TrackDTO> getAllTracksByPlaylist(int playlistID);
+    List<Track> getAllTracksByPlaylist(int playlistID);
 
     void removeTrackFromPlaylist(int playlistID, int trackID);
 
-    void addTrackToPlaylist(int playlistID, TrackDTO track);
+    void addTrackToPlaylist(int playlistID, Track track);
 
     void addTrackToPlaylist(int playlistID, int trackID, boolean offlineAvailable);
 }

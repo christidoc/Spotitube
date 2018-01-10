@@ -1,6 +1,6 @@
 package datasource;
 
-import datasource.dto.PlaylistDTO;
+import domain.Playlist;
 
 import javax.inject.Inject;
 import java.sql.*;
@@ -12,14 +12,14 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
     DBConnector mySQLConnector;
     //DBConnector mySQLConnector = new MySQLConnector();
 
-    public List<PlaylistDTO> getAllPlaylists(){
-        List<PlaylistDTO> playlists = new ArrayList<>();
+    public List<Playlist> getAllPlaylists(){
+        List<Playlist> playlists = new ArrayList<>();
 
         String query = ("SELECT * FROM playlist");
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
-                PlaylistDTO playlist = new PlaylistDTO();
+                Playlist playlist = new Playlist();
                 playlist.setId(resultSet.getInt("id"));
                 playlist.setName(resultSet.getString("name"));
                 playlist.setOwner(resultSet.getString("owner"));
@@ -36,22 +36,22 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
         mySQLConnector.updateSomethingInDatabase(query);
     }
 
-    public void addPlaylist(PlaylistDTO playlist){
+    public void addPlaylist(Playlist playlist){
         String query = ("INSERT INTO playlist (name, owner) VALUES('" + playlist.getName() + "', '" + playlist.getOwner() + "');");
         mySQLConnector.updateSomethingInDatabase(query);
     }
 
-    public void updatePlaylist(PlaylistDTO playlist){
+    public void updatePlaylist(Playlist playlist){
         String query = ("UPDATE playlist SET name = '" + playlist.getName() + "' WHERE id = " + playlist.getId());
         mySQLConnector.updateSomethingInDatabase(query);
     }
 
-    public PlaylistDTO getPlaylist(int playlistID){
+    public Playlist getPlaylist(int playlistID){
         String query = ("SELECT * FROM playlist WHERE id=" + playlistID);
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
-                PlaylistDTO playlist = new PlaylistDTO();
+                Playlist playlist = new Playlist();
                 playlist.setId(resultSet.getInt("id"));
                 playlist.setName(resultSet.getString("name"));
                 playlist.setOwner(resultSet.getString("owner"));

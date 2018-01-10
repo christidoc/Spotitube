@@ -1,15 +1,7 @@
-import datasource.MySQLConnector;
-import datasource.MySQLPlaylistDAO;
-import datasource.MySQLTrackDAO;
-import datasource.MySQLUserDAO;
-import datasource.dto.PlaylistDTO;
-import datasource.dto.TrackDTO;
 import domain.Playlist;
 import domain.Track;
-import service.LoginService;
 import service.PlaylistService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

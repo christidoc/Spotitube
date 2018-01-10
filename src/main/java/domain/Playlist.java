@@ -2,7 +2,6 @@ package domain;
 
 import datasource.MySQLTrackDAO;
 import datasource.TrackDAO;
-import datasource.dto.TrackDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,43 +77,26 @@ public class Playlist {
     }
 
     public void fillTracks() {
-        List<TrackDTO> DTOtracks = mySQLTrackDAO.getAllTracksByPlaylist(id);
-
-        for (TrackDTO trackDTO : DTOtracks) {
-            Track track = new Track();
-            track.setId(trackDTO.getId());
-            track.setTitle(trackDTO.getTitle());
-            track.setPerformer(trackDTO.getPerformer());
-            track.setDuration(trackDTO.getDuration());
-            track.setPlaycount(trackDTO.getPlaycount());
-            track.setOfflineAvailable(trackDTO.isOfflineAvailable());
-            //track.setOfflineAvailable(true);
-            tracks.add(track);
+        List<Track> tracks = mySQLTrackDAO.getAllTracksByPlaylist(id);
+        for(Track track : tracks){
+            this.tracks.add(track);
         }
     }
 
     public List<Track> getAddableTracks() {
-        List<Track> tracks = new ArrayList<>();
-        List<TrackDTO> DTOtracks = mySQLTrackDAO.getAllTracks();
-        for (TrackDTO trackDTO : DTOtracks) {
+        List<Track> addableTracks = new ArrayList<>();
+        List<Track> tracks = mySQLTrackDAO.getAllTracks();
+        for (Track track : tracks) {
             boolean exist = false;
-            for (Track track : this.tracks) {
-                if (track.getId() == trackDTO.getId())
+            for (Track playlistTrack : this.tracks) {
+                if (playlistTrack.getId() == track.getId())
                     exist = true;
             }
             if (!exist) {
-                Track track = new Track();
-                track.setId(trackDTO.getId());
-                track.setTitle(trackDTO.getTitle());
-                track.setPerformer(trackDTO.getPerformer());
-                track.setDuration(trackDTO.getDuration());
-                track.setPlaycount(trackDTO.getPlaycount());
-                //Fout in geleverde documentatie waardoor niet duidelijk is of offlineavailable bij Track hoort of bij Track in Playlist.
-                track.setOfflineAvailable(true);
-                tracks.add(track);
+                addableTracks.add(track);
             }
         }
-        return tracks;
+        return addableTracks;
     }
 
     public void deleteTrack(int trackID){

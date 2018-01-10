@@ -1,7 +1,6 @@
 package service;
 
 import datasource.UserDAO;
-import datasource.dto.UserDTO;
 import domain.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +23,9 @@ public class LoginServiceTest {
     private TokenService tokenService;
     @Mock
     private UserDAO userDAO;
-    UserDTO userDTO1;
-    UserDTO userDTO2;
-    List<UserDTO> users;
+    User user1;
+    User user2;
+    List<User> users;
 
     @InjectMocks
     private LoginService loginService;
@@ -34,11 +33,11 @@ public class LoginServiceTest {
     @Before
     public void setUP() throws Exception {
         MockitoAnnotations.initMocks(this);
-        userDTO1 = new UserDTO("username", "password");
-        userDTO2 = new UserDTO("username2", "password2");
+        user1 = new User("username", "password");
+        user2 = new User("username2", "password2");
         users = new ArrayList<>();
-        users.add(userDTO1);
-        users.add(userDTO2);
+        users.add(user1);
+        users.add(user2);
     }
 
     @Test

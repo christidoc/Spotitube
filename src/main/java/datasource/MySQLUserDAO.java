@@ -1,6 +1,6 @@
 package datasource;
 
-import datasource.dto.UserDTO;
+import domain.User;
 
 import javax.inject.Inject;
 import java.sql.*;
@@ -12,15 +12,15 @@ public class MySQLUserDAO implements UserDAO {
     DBConnector mySQLConnector;
     //DBConnector mySQLConnector = new MySQLConnector();
 
-    public List<UserDTO> getAllUsers(){
-        ArrayList<UserDTO> users = new ArrayList<>();
+    public List<User> getAllUsers(){
+        ArrayList<User> users = new ArrayList<>();
 
         String query = "SELECT * FROM user";
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while(resultSet.next()){
-                UserDTO user = new UserDTO();
-                user.setUsername(resultSet.getString("username"));
+                User user = new User();
+                user.setUserName(resultSet.getString("username"));
                 user.setPassword(resultSet.getString("password"));
                 users.add(user);
             }

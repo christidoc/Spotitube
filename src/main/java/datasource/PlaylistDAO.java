@@ -1,6 +1,6 @@
 package datasource;
 
-import datasource.dto.PlaylistDTO;
+import domain.Playlist;
 
 import java.util.List;
 
@@ -8,13 +8,13 @@ import java.util.List;
  * Created by Christiaan on 17-11-2017.
  */
 public interface PlaylistDAO {
-    List<PlaylistDTO> getAllPlaylists();
+    List<Playlist> getAllPlaylists();
 
-    void addPlaylist(PlaylistDTO playlist);
+    void addPlaylist(Playlist playlist);
 
     void deletePlaylist(int playlistID);
 
-    void updatePlaylist(PlaylistDTO playlist);
+    void updatePlaylist(Playlist playlist);
 
-    PlaylistDTO getPlaylist(int playlistID);
+    Playlist getPlaylist(int playlistID);
 }

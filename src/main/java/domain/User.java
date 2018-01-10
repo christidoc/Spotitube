@@ -5,11 +5,20 @@ package domain;
  */
 public class User {
     private String userName;
+    private String password;
     private String token;
 
-    public User(String user, String token){
+    public User(){}
+
+    public User(String user, String password){
+        this.userName = user;
+        this.password = password;
+    }
+
+    public User(String user, String token, String password){
         this.userName = user;
         this.token = token;
+        this.password = password;
     }
 
     public String getUserName() {
@@ -27,4 +36,8 @@ public class User {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) {this.password = password; }
 }

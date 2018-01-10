@@ -1,6 +1,6 @@
 package datasource;
 
-import datasource.dto.UserDTO;
+import domain.User;
 
 import java.util.List;
 
@@ -8,5 +8,5 @@ import java.util.List;
  * Created by Christiaan on 9-11-2017.
  */
 public interface UserDAO {
-    List<UserDTO> getAllUsers();
+    List<User> getAllUsers();
 }

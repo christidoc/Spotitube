@@ -1,12 +1,9 @@
 package service;
 
-import datasource.MySQLPlaylistDAO;
 import datasource.PlaylistDAO;
-import datasource.dto.PlaylistDTO;
 import domain.Playlist;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,26 +14,11 @@ public class PlaylistService {
     PlaylistDAO playlistDAO;
 
     public List<Playlist> getPlaylists(){
-        List<PlaylistDTO> DTOplaylists = playlistDAO.getAllPlaylists();
-        List<Playlist> playlists = new ArrayList<>();
-
-        for(PlaylistDTO playlistDTO : DTOplaylists){
-            Playlist playlist = new Playlist();
-            playlist.setId(playlistDTO.getId());
-            playlist.setName(playlistDTO.getName());
-            playlist.setOwner(playlistDTO.getOwner());
-            playlists.add(playlist);
-        }
-        return playlists;
+        return playlistDAO.getAllPlaylists();
     }
 
     public Playlist getPlaylist(int playlistID){
-        PlaylistDTO playlistDTO = playlistDAO.getPlaylist(playlistID);
-        Playlist playlist = new Playlist();
-        playlist.setId(playlistDTO.getId());
-        playlist.setName(playlistDTO.getName());
-        playlist.setOwner(playlistDTO.getOwner());
-        return playlist;
+        return playlistDAO.getPlaylist(playlistID);
     }
 
     public void deletePlaylist(int playlistID){
@@ -44,10 +26,10 @@ public class PlaylistService {
     }
 
     public void addPlaylist(Playlist playlist){
-        playlistDAO.addPlaylist(new PlaylistDTO(-1, playlist.getName(), playlist.getOwner()));
+        playlistDAO.addPlaylist(playlist);
     }
 
     public void editPlaylist(Playlist playlist){
-        playlistDAO.updatePlaylist(new PlaylistDTO(playlist.getId(), playlist.getName(), playlist.getOwner()));
+        playlistDAO.updatePlaylist(playlist);
     }
 }

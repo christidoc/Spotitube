@@ -1,7 +1,8 @@
 package datasource;
 
-import datasource.dto.PlaylistDTO;
-import datasource.dto.TrackDTO;
+import domain.Song;
+import domain.Track;
+import domain.Video;
 
 import javax.inject.Inject;
 import java.sql.ResultSet;
@@ -13,23 +14,33 @@ public class MySQLTrackDAO implements  TrackDAO{
     //DBConnector mySQLConnector;
     DBConnector mySQLConnector = new MySQLConnector();
 
-    public List<TrackDTO> getAllTracks(){
-        List<TrackDTO> tracks = new ArrayList<>();
+    public List<Track> getAllTracks(){
+        List<Track> tracks = new ArrayList<>();
 
         String query = ("SELECT * FROM track");
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
-                TrackDTO track = new TrackDTO();
-                track.setId(resultSet.getInt("id"));
-                track.setTitle(resultSet.getString("title"));
-                track.setPerformer(resultSet.getString("performer"));
-                track.setDuration(resultSet.getInt("duration"));
-                track.setAlbum(resultSet.getString("album"));
-                track.setPlaycount(resultSet.getInt("playcount"));
-                track.setPublicationDate(resultSet.getInt("publicationDate"));
-                track.setDescription(resultSet.getString("description"));
-                tracks.add(track);
+                if(resultSet.getBoolean("song")){
+                    Song song = new Song();
+                    song.setId(resultSet.getInt("id"));
+                    song.setTitle(resultSet.getString("title"));
+                    song.setPerformer(resultSet.getString("performer"));
+                    song.setDuration(resultSet.getInt("duration"));
+                    song.setAlbum(resultSet.getString("album"));
+                    song.setPlaycount(resultSet.getInt("playcount"));
+                    tracks.add(song);
+                }
+                else{
+                    Video video = new Video();
+                    video.setId(resultSet.getInt("id"));
+                    video.setTitle(resultSet.getString("title"));
+                    video.setPerformer(resultSet.getString("performer"));
+                    video.setDuration(resultSet.getInt("duration"));
+                    video.setPlaycount(resultSet.getInt("playcount"));
+                    video.setDescription(resultSet.getString("description"));
+                    tracks.add(video);
+                }
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -37,24 +48,35 @@ public class MySQLTrackDAO implements  TrackDAO{
         return tracks;
     }
 
-    public List<TrackDTO> getAllTracksByPlaylist(int playlistID){
-        List<TrackDTO> tracks = new ArrayList<>();
+    public List<Track> getAllTracksByPlaylist(int playlistID){
+        List<Track> tracks = new ArrayList<>();
 
         String query = ("select * from track JOIN playlisttrack ON track.id = playlisttrack.track WHERE playlist = " + playlistID);
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
-                TrackDTO track = new TrackDTO();
-                track.setId(resultSet.getInt("id"));
-                track.setTitle(resultSet.getString("title"));
-                track.setPerformer(resultSet.getString("performer"));
-                track.setDuration(resultSet.getInt("duration"));
-                track.setAlbum(resultSet.getString("album"));
-                track.setPlaycount(resultSet.getInt("playcount"));
-                track.setPublicationDate(resultSet.getInt("publicationDate"));
-                track.setDescription(resultSet.getString("description"));
-                track.setOfflineAvailable(resultSet.getBoolean("offlineavailable"));
-                tracks.add(track);
+                if(resultSet.getBoolean("song")){
+                    Song song = new Song();
+                    song.setId(resultSet.getInt("id"));
+                    song.setTitle(resultSet.getString("title"));
+                    song.setPerformer(resultSet.getString("performer"));
+                    song.setDuration(resultSet.getInt("duration"));
+                    song.setAlbum(resultSet.getString("album"));
+                    song.setPlaycount(resultSet.getInt("playcount"));
+                    song.setOfflineAvailable(resultSet.getBoolean("offlineavailable"));
+                    tracks.add(song);
+                }
+                else{
+                    Video video = new Video();
+                    video.setId(resultSet.getInt("id"));
+                    video.setTitle(resultSet.getString("title"));
+                    video.setPerformer(resultSet.getString("performer"));
+                    video.setDuration(resultSet.getInt("duration"));
+                    video.setPlaycount(resultSet.getInt("playcount"));
+                    video.setDescription(resultSet.getString("description"));
+                    video.setOfflineAvailable(resultSet.getBoolean("offlineavailable"));
+                    tracks.add(video);
+                }
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -67,7 +89,7 @@ public class MySQLTrackDAO implements  TrackDAO{
         mySQLConnector.updateSomethingInDatabase(query);
     }
 
-    public void addTrackToPlaylist(int playlistID, TrackDTO track){
+    public void addTrackToPlaylist(int playlistID, Track track){
         //Lookup track before add it to the playlist && check of offlineavailable(boolean) automatisch goed gaat in db.
         String query = ("INSERT INTO playlisttrack (playlist, track, offlineavailable) VALUES(" + playlistID + "," + track.getId() + "," + track.isOfflineAvailable() + ")");
         mySQLConnector.updateSomethingInDatabase(query);
