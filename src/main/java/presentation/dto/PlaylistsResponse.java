@@ -1,7 +1,5 @@
 package presentation.dto;
 
-import domain.Playlist;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +7,10 @@ import java.util.List;
  * Created by Christiaan on 23-10-2017.
  */
 public class PlaylistsResponse {
-    private List<Playlist> playlists;
+    private List<PlaylistDTO> playlists;
     private int length;
 
-    public PlaylistsResponse(List<Playlist> playlists, int length){
+    public PlaylistsResponse(List<PlaylistDTO> playlists, int length){
         this.playlists = playlists;
         this.length = length;
     }
@@ -21,15 +19,15 @@ public class PlaylistsResponse {
         playlists = new ArrayList<>();
     }
 
-    public List<Playlist> getPlaylists() {
+    public List<PlaylistDTO> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(List<Playlist> playlists) {
+    public void setPlaylists(List<PlaylistDTO> playlists) {
         this.playlists = playlists;
     }
 
-    public void addPlaylist(Playlist playlist){
+    public void addPlaylist(PlaylistDTO playlist){
         playlists.add(playlist);
     }
 

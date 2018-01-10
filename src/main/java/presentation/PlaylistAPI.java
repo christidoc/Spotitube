@@ -2,15 +2,14 @@ package presentation;
 
 import domain.Playlist;
 import domain.Token;
-import presentation.dto.PlaylistsRequest;
-import presentation.dto.PlaylistsResponse;
-import presentation.dto.TrackRequest;
-import presentation.dto.TrackResponse;
+import domain.User;
+import presentation.dto.*;
 import service.PlaylistService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/playlists")
@@ -22,10 +21,15 @@ public class PlaylistAPI {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public PlaylistsResponse getPlaylists(@QueryParam("token") String token) {
-        if(Token.isViableToken(token)) {
+        User user = Token.getUser(token);
+        if(user != null) {
             List<Playlist> playlists = playlistService.getPlaylists();
             PlaylistsResponse playlistsResponse = new PlaylistsResponse();
-            playlistsResponse.setPlaylists(playlists);
+            List<PlaylistDTO> playlistDTOs = new ArrayList<>();
+            for(Playlist playlist : playlists){
+                playlistDTOs.add(new PlaylistDTO(playlist, user));
+            }
+            playlistsResponse.setPlaylists(playlistDTOs);
             int length = 0;
             for(Playlist playlist : playlists){
                 playlist.fillTracks();
