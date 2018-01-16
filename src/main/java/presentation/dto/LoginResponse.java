@@ -7,7 +7,7 @@ public class LoginResponse {
     private String user;
     private String token;
 
-    public LoginResponse(){};
+    public LoginResponse(){}
 
     public LoginResponse(String user, String token){
         this.user = user;

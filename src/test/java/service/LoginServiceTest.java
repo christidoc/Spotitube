@@ -45,7 +45,7 @@ public class LoginServiceTest {
         when(tokenService.getRandomToken()).thenReturn("123");
         when(userDAO.getAllUsers()).thenReturn(users);
 
-        User user = loginService.getUserByLogin("username", "password");
+        ActiveUser user = loginService.loginUser("username", "password");
 
         assertEquals(user.getUserName(), "username");
         assertEquals(user.getToken(), "123");
@@ -56,7 +56,7 @@ public class LoginServiceTest {
         when(tokenService.getRandomToken()).thenReturn("123");
         when(userDAO.getAllUsers()).thenReturn(users);
 
-        User user = loginService.getUserByLogin("username", "password3");
+        ActiveUser user = loginService.loginUser("username", "password3");
 
         assertNull(user);
     }

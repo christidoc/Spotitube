@@ -1,8 +1,8 @@
 package presentation;
 
 import domain.Playlist;
-import domain.Token;
 import presentation.dto.TrackResponse;
+import service.LoginService;
 import service.PlaylistService;
 
 import javax.inject.Inject;
@@ -19,13 +19,15 @@ import javax.ws.rs.core.MediaType;
 public class TrackAPI {
     @Inject
     PlaylistService playlistService;
+    @Inject
+    LoginService loginService;
 
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public TrackResponse getTracks(@QueryParam("forPlaylist") int playlistID,
                                    @QueryParam("token") String token) {
-        if(Token.isViableToken(token)) {
+        if(loginService.isViableToken(token)) {
             Playlist playlist = playlistService.getPlaylist(playlistID);
             playlist.fillTracks();
             return new TrackResponse(playlist.getAddableTracks());

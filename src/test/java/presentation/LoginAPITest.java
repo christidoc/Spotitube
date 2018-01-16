@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import presentation.dto.LoginRequest;
 import presentation.dto.LoginResponse;
+import service.ActiveUser;
 import service.LoginService;
 
 public class LoginAPITest {
@@ -27,7 +28,7 @@ public class LoginAPITest {
 
     @Test
     public void testPathReturnResponse() {
-        when(loginService.getUserByLogin(any(String.class), any(String.class))).thenReturn(new User("user", "token"));
+        when(loginService.loginUser(any(String.class), any(String.class))).thenReturn(new ActiveUser("user", "token"));
 
         LoginResponse loginResponse = api.login(new LoginRequest("",""));
 

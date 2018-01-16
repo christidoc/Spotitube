@@ -1,9 +1,9 @@
 package presentation;
 
 import domain.Playlist;
-import domain.Token;
-import domain.User;
 import presentation.dto.*;
+import service.ActiveUser;
+import service.LoginService;
 import service.PlaylistService;
 
 import javax.inject.Inject;
@@ -16,12 +16,14 @@ import java.util.List;
 public class PlaylistAPI {
     @Inject
     PlaylistService playlistService;
+    @Inject
+    LoginService loginService;
 
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public PlaylistsResponse getPlaylists(@QueryParam("token") String token) {
-        User user = Token.getUser(token);
+        ActiveUser user = loginService.getUser(token);
         if(user != null) {
             List<Playlist> playlists = playlistService.getPlaylists();
             PlaylistsResponse playlistsResponse = new PlaylistsResponse();
@@ -46,7 +48,7 @@ public class PlaylistAPI {
     @Produces(MediaType.APPLICATION_JSON)
     public PlaylistsResponse deletePlaylist(@PathParam("id") int playlistID,
                                             @QueryParam("token") String token){
-        if(Token.isViableToken(token)) {
+        if(loginService.isViableToken(token)) {
             playlistService.deletePlaylist(playlistID);
 
             return getPlaylists(token);
@@ -60,8 +62,8 @@ public class PlaylistAPI {
     @Produces(MediaType.APPLICATION_JSON)
     public PlaylistsResponse addPlaylist (@QueryParam("token") String token,
                                           PlaylistsRequest playlistsRequest){
-        if(Token.isViableToken(token)){
-            String userName = Token.getUser(token).getUserName();
+        if(loginService.isViableToken(token)){
+            String userName = loginService.getUser(token).getUserName();
             playlistService.addPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userName, playlistsRequest.getTracks()));
 
             return getPlaylists(token);
@@ -76,8 +78,8 @@ public class PlaylistAPI {
     public PlaylistsResponse editPlaylist (@PathParam("id") int playlistID,
                                            @QueryParam("token") String token,
                                            PlaylistsRequest playlistsRequest) {
-        if(Token.isViableToken(token)){
-            String userName = Token.getUser(token).getUserName();
+        if(loginService.isViableToken(token)){
+            String userName = loginService.getUser(token).getUserName();
             playlistService.editPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userName, playlistsRequest.getTracks()));
 
             return getPlaylists(token);
@@ -90,7 +92,7 @@ public class PlaylistAPI {
     @Produces(MediaType.APPLICATION_JSON)
     public TrackResponse getTracksByPlaylist( @PathParam("id") int id,
                                               @QueryParam("token") String token){
-        if(Token.isViableToken(token)){
+        if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(id);
             playlist.fillTracks();
             return new TrackResponse(playlist.getTracks());
@@ -104,7 +106,7 @@ public class PlaylistAPI {
     public TrackResponse removeTrack( @PathParam("playlistID") int playlistID,
                                       @PathParam("trackID") int trackID,
                                       @QueryParam("token") String token) {
-        if(Token.isViableToken(token)){
+        if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(playlistID);
             playlist.fillTracks();
             playlist.deleteTrack(trackID);
@@ -120,7 +122,7 @@ public class PlaylistAPI {
     public TrackResponse addTrack( @PathParam("playlistID") int playlistID,
                                       @QueryParam("token") String token,
                                       TrackRequest trackRequest) {
-        if(Token.isViableToken(token)){
+        if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(playlistID);
             playlist.addTrack(trackRequest.getId(), trackRequest.isOfflineAvailable());
             return new TrackResponse(playlist.getTracks());

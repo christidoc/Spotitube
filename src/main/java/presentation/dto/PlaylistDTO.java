@@ -3,6 +3,7 @@ package presentation.dto;
 import domain.Playlist;
 import domain.Track;
 import domain.User;
+import service.ActiveUser;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class PlaylistDTO {
     private Boolean owner;
     private List<Track> tracks;
 
-    public PlaylistDTO (Playlist playlist, User user){
+    public PlaylistDTO (Playlist playlist, ActiveUser user){
         this.id = playlist.getId();
         this.name = playlist.getName();
         if(playlist.getOwner().equals(user.getUserName())){
