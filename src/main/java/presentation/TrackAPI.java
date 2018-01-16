@@ -4,6 +4,7 @@ import domain.Playlist;
 import presentation.dto.TrackResponse;
 import service.LoginService;
 import service.PlaylistService;
+import service.TrackService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -21,6 +22,8 @@ public class TrackAPI {
     PlaylistService playlistService;
     @Inject
     LoginService loginService;
+    @Inject
+    TrackService trackService;
 
     @Path("/")
     @GET
@@ -29,8 +32,8 @@ public class TrackAPI {
                                    @QueryParam("token") String token) {
         if(loginService.isViableToken(token)) {
             Playlist playlist = playlistService.getPlaylist(playlistID);
-            playlist.fillTracks();
-            return new TrackResponse(playlist.getAddableTracks());
+            trackService.fillTracksByPlaylist(playlist);
+            return new TrackResponse(trackService.getAddableTracksByPlaylist(playlist));
         }
         return null;
     }

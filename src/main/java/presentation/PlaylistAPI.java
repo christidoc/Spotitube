@@ -5,6 +5,7 @@ import presentation.dto.*;
 import service.ActiveUser;
 import service.LoginService;
 import service.PlaylistService;
+import service.TrackService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -18,6 +19,8 @@ public class PlaylistAPI {
     PlaylistService playlistService;
     @Inject
     LoginService loginService;
+    @Inject
+    TrackService trackService;
 
     @Path("/")
     @GET
@@ -34,7 +37,7 @@ public class PlaylistAPI {
             playlistsResponse.setPlaylists(playlistDTOs);
             int length = 0;
             for(Playlist playlist : playlists){
-                playlist.fillTracks();
+                trackService.fillTracksByPlaylist(playlist);
                 length += playlist.getLength();
             }
             playlistsResponse.setLength(length);
@@ -94,7 +97,7 @@ public class PlaylistAPI {
                                               @QueryParam("token") String token){
         if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(id);
-            playlist.fillTracks();
+            trackService.fillTracksByPlaylist(playlist);
             return new TrackResponse(playlist.getTracks());
         }
         return null;
@@ -108,8 +111,8 @@ public class PlaylistAPI {
                                       @QueryParam("token") String token) {
         if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(playlistID);
-            playlist.fillTracks();
-            playlist.deleteTrack(trackID);
+            trackService.deleteTrackByPlaylist(playlistID, trackID);
+            trackService.fillTracksByPlaylist(playlist);
             return new TrackResponse(playlist.getTracks());
         }
         return null;
@@ -124,7 +127,8 @@ public class PlaylistAPI {
                                       TrackRequest trackRequest) {
         if(loginService.isViableToken(token)){
             Playlist playlist = playlistService.getPlaylist(playlistID);
-            playlist.addTrack(trackRequest.getId(), trackRequest.isOfflineAvailable());
+            trackService.addTrack(playlist.getId(), trackRequest.getId(), trackRequest.isOfflineAvailable());
+            trackService.fillTracksByPlaylist(playlist);
             return new TrackResponse(playlist.getTracks());
         }
         return null;

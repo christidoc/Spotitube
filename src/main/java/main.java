@@ -1,6 +1,7 @@
 import domain.Playlist;
 import domain.Track;
 import service.PlaylistService;
+import service.TrackService;
 
 import java.util.List;
 
@@ -10,9 +11,10 @@ import java.util.List;
 public class main {
     public static void main (String [] args){
         PlaylistService playlistService = new PlaylistService();
+        TrackService trackService = new TrackService();
         Playlist playlist = playlistService.getPlaylist(3);
-        playlist.fillTracks();
-        List<Track> tracks = playlist.getAddableTracks();
+        trackService.fillTracksByPlaylist(playlist);
+        List<Track> tracks = trackService.getAddableTracksByPlaylist(playlist);
         System.out.println(tracks.size());
     }
 }

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MySQLTrackDAO implements  TrackDAO{
-    //@Inject
-    //DBConnector mySQLConnector;
-    DBConnector mySQLConnector = new MySQLConnector();
+    @Inject
+    DBConnector mySQLConnector;
+    //DBConnector mySQLConnector = new MySQLConnector();
 
     public List<Track> getAllTracks(){
         List<Track> tracks = new ArrayList<>();
