@@ -6,14 +6,14 @@ import java.util.List;
 public class Playlist {
     private int id;
     private String name;
-    private String owner;
+    private User owner;
     private List<Track> tracks;
 
     public Playlist() {
         tracks = new ArrayList<>();
     }
 
-    public Playlist(int id, String name, String owner, List<Track> tracks) {
+    public Playlist(int id, String name, User owner, List<Track> tracks) {
         this.id = id;
         this.name = name;
         this.owner = owner;
@@ -36,11 +36,11 @@ public class Playlist {
         this.name = name;
     }
 
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 

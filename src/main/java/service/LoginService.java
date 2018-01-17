@@ -16,7 +16,7 @@ public class LoginService {
 
     public LoginService(){}
 
-    public ActiveUser getUser(String token){
+    public ActiveUser getActiveUser(String token){
         for(ActiveUser user : users){
             if(user.getToken().equals(token)){
                 return user;

@@ -2,10 +2,7 @@ package presentation;
 
 import domain.Playlist;
 import presentation.dto.*;
-import service.ActiveUser;
-import service.LoginService;
-import service.PlaylistService;
-import service.TrackService;
+import service.*;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -21,12 +18,14 @@ public class PlaylistAPI {
     LoginService loginService;
     @Inject
     TrackService trackService;
+    @Inject
+    UserService userService;
 
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public PlaylistsResponse getPlaylists(@QueryParam("token") String token) {
-        ActiveUser user = loginService.getUser(token);
+        ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
             List<Playlist> playlists = playlistService.getPlaylists();
             PlaylistsResponse playlistsResponse = new PlaylistsResponse();
@@ -66,8 +65,8 @@ public class PlaylistAPI {
     public PlaylistsResponse addPlaylist (@QueryParam("token") String token,
                                           PlaylistsRequest playlistsRequest){
         if(loginService.isViableToken(token)){
-            String userName = loginService.getUser(token).getUserName();
-            playlistService.addPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userName, playlistsRequest.getTracks()));
+            String userName = loginService.getActiveUser(token).getUserName();
+            playlistService.addPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userService.getUser(userName), playlistsRequest.getTracks()));
 
             return getPlaylists(token);
         }
@@ -82,8 +81,8 @@ public class PlaylistAPI {
                                            @QueryParam("token") String token,
                                            PlaylistsRequest playlistsRequest) {
         if(loginService.isViableToken(token)){
-            String userName = loginService.getUser(token).getUserName();
-            playlistService.editPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userName, playlistsRequest.getTracks()));
+            String userName = loginService.getActiveUser(token).getUserName();
+            playlistService.editPlaylist(new Playlist(playlistsRequest.getId(), playlistsRequest.getName(), userService.getUser(userName), playlistsRequest.getTracks()));
 
             return getPlaylists(token);
         }

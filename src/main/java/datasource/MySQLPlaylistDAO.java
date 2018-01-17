@@ -1,6 +1,7 @@
 package datasource;
 
 import domain.Playlist;
+import domain.User;
 
 import javax.inject.Inject;
 import java.sql.*;
@@ -15,14 +16,14 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
     public List<Playlist> getAllPlaylists(){
         List<Playlist> playlists = new ArrayList<>();
 
-        String query = ("SELECT * FROM playlist");
+        String query = ("SELECT * FROM playlist JOIN user ON playlist.owner = user.username");
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
                 Playlist playlist = new Playlist();
                 playlist.setId(resultSet.getInt("id"));
                 playlist.setName(resultSet.getString("name"));
-                playlist.setOwner(resultSet.getString("owner"));
+                playlist.setOwner(new User(resultSet.getString("owner"), resultSet.getString("password")));
                 playlists.add(playlist);
             }
         } catch (Exception e){
@@ -37,7 +38,7 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
     }
 
     public void addPlaylist(Playlist playlist){
-        String query = ("INSERT INTO playlist (name, owner) VALUES('" + playlist.getName() + "', '" + playlist.getOwner() + "');");
+        String query = ("INSERT INTO playlist (name, owner) VALUES('" + playlist.getName() + "', '" + playlist.getOwner().getUserName() + "');");
         mySQLConnector.updateSomethingInDatabase(query);
     }
 
@@ -47,14 +48,14 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
     }
 
     public Playlist getPlaylist(int playlistID){
-        String query = ("SELECT * FROM playlist WHERE id=" + playlistID);
+        String query = ("SELECT * FROM playlist JOIN user ON playlist.owner = user.username WHERE id=" + playlistID);
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
                 Playlist playlist = new Playlist();
                 playlist.setId(resultSet.getInt("id"));
                 playlist.setName(resultSet.getString("name"));
-                playlist.setOwner(resultSet.getString("owner"));
+                playlist.setOwner(new User(resultSet.getString("owner"), resultSet.getString("password")));
                 return playlist;
             }
         } catch (Exception e){

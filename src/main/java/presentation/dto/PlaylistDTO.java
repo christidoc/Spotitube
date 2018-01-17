@@ -19,7 +19,7 @@ public class PlaylistDTO {
     public PlaylistDTO (Playlist playlist, ActiveUser user){
         this.id = playlist.getId();
         this.name = playlist.getName();
-        if(playlist.getOwner().equals(user.getUserName())){
+        if(playlist.getOwner().getUserName().equals(user.getUserName())){
             owner = true;
         }else{
             owner = false;
