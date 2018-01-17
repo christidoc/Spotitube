@@ -3,4 +3,4 @@
 ##Diagrammen
 
 ### Domein
-![Domein Class Diagram](ClassDiagram.jpg)
+![Domein Class Diagram](ClassDiagram.png)
