@@ -3,7 +3,7 @@ package domain;
 /**
  * Created by Christiaan on 13-10-2017.
  */
-public class User {
+public class User extends DomainObject{
     private String userName;
     private String password;
 

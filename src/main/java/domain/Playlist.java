@@ -1,13 +1,19 @@
 package domain;
 
+import datasource.PlaylistDAO;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Playlist {
+public class Playlist extends DomainObject{
+    @Inject
+    PlaylistDAO playlistDAO;
     private int id;
     private String name;
     private User owner;
     private List<Track> tracks;
+    private int length;
 
     public Playlist() {
         tracks = new ArrayList<>();
@@ -46,7 +52,10 @@ public class Playlist {
 
     public void addTrack(Track track) {
         tracks.add(track);
+        calculateLength();
     }
+
+    public int getLength(){return length; }
 
     public Track getTrack(int id) {
         for (Track track : tracks) {
@@ -61,14 +70,6 @@ public class Playlist {
         return tracks;
     }
 
-    public int getLength() {
-        int length = 0;
-        for (Track track : tracks) {
-            length += track.getDuration();
-        }
-        return length;
-    }
-
     public void deleteTrack(int trackID){
         Track removeTrack = null;
         for(Track track : tracks){
@@ -77,5 +78,18 @@ public class Playlist {
             }
         }
         tracks.remove(removeTrack);
+        calculateLength();
+    }
+
+    //Logic
+    public void calculateLength() {
+        length = 0;
+        for (Track track : tracks) {
+            length += track.getDuration();
+        }
+    }
+
+    public void deletePlaylist(){
+        playlistDAO.deletePlaylist(this.getId());
     }
 }

@@ -8,6 +8,21 @@ public class MySQLConnector implements  DBConnector{
     static final String USER = "root";
     static final String PASS = "password";
 
+    public Connection getConnection(){
+        try {
+            Class.forName(JDBC_DRIVER);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+
     public ResultSet getSomethingFromDatabase(String query){
         try {
             Class.forName(JDBC_DRIVER);

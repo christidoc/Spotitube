@@ -1,6 +1,6 @@
 package domain;
 
-public class Track {
+public class Track extends DomainObject{
     private int id;
     private String title;
     private String performer;

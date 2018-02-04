@@ -48,11 +48,12 @@ public class MySQLPlaylistDAO implements PlaylistDAO {
     }
 
     public Playlist getPlaylist(int playlistID){
+        Playlist playlist;
         String query = ("SELECT * FROM playlist JOIN user ON playlist.owner = user.username WHERE id=" + playlistID);
         ResultSet resultSet = mySQLConnector.getSomethingFromDatabase(query);
         try {
             while (resultSet.next()) {
-                Playlist playlist = new Playlist();
+                playlist = new Playlist();
                 playlist.setId(resultSet.getInt("id"));
                 playlist.setName(resultSet.getString("name"));
                 playlist.setOwner(new User(resultSet.getString("owner"), resultSet.getString("password")));

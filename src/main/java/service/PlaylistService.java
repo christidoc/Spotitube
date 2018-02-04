@@ -22,7 +22,9 @@ public class PlaylistService {
     }
 
     public void deletePlaylist(int playlistID){
-        playlistDAO.deletePlaylist(playlistID);
+        Playlist playlist = getPlaylist(playlistID);
+        playlist.deletePlaylist();
+        //playlistDAO.deletePlaylist(playlistID);
     }
 
     public void addPlaylist(Playlist playlist){
