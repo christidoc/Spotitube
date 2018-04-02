@@ -41,7 +41,7 @@ abstract class AbstractMapper {
         try {
             findStatement = DB.prepareStatement(findAllStatement());
             ResultSet rs = findStatement.executeQuery();
-            rs.next();
+            //rs.next();
             return loadAll(rs);
         } catch (SQLException e) {
             e.printStackTrace();

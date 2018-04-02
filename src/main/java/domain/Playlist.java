@@ -1,14 +1,14 @@
 package domain;
 
 import datasource.PlaylistDAO;
+import datasource.PlaylistMapper;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Playlist extends DomainObject{
-    @Inject
-    PlaylistDAO playlistDAO;
+    public static PlaylistMapper playlistMapper = new PlaylistMapper();
     private int id;
     private String name;
     private User owner;
@@ -90,6 +90,22 @@ public class Playlist extends DomainObject{
     }
 
     public void deletePlaylist(){
-        playlistDAO.deletePlaylist(this.getId());
+
+    }
+
+    public void insert(){
+        playlistMapper.insert(this);
+    }
+
+    public static List<Playlist> getAllPlaylists(){
+        return playlistMapper.getAllPlaylists();
+    }
+
+    public static Playlist getPlaylist(int id) {
+        return playlistMapper.getPlaylist(id);
+    }
+
+    public void update (){
+        playlistMapper.update(this);
     }
 }

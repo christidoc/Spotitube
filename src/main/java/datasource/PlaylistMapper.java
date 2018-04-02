@@ -14,7 +14,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
     static private List<Playlist> playlists;
 
     protected final String findStatement() {
-        return "SELECT * FROM playlist JOIN user ON playlist.owner = user.username WHERE id= ?";
+        return "SELECT * FROM playlist JOIN user ON playlist.owner = user.username WHERE id = ?";
     }
 
     protected  final String findAllStatement() {
@@ -22,12 +22,17 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
     }
 
     protected final String insertStatement() {
-        return "INSERT INTO playlist VALUES (?, ?)";
+        return "INSERT INTO playlist (name, owner) VALUES (?, ?)";
     }
 
     protected final String deleteStatement() {
-
+        return "DELETE FROM playlist WHERE id = ?";
     }
+
+    protected final String updateStatement() {
+        return "UPDATE playlist SET name = ?, owner = ? WHERE id = ?";
+    }
+
 
     public PlaylistMapper() {
         if(playlists == null){
@@ -37,6 +42,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
 
     protected DomainObject load(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
+        System.out.println("load playlist with id: " + id);
         for(Playlist playlist : playlists){
             if(playlist.getId() == id){
                 return playlist;
@@ -58,6 +64,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
                 playlist.setName(rs.getString("name"));
                 //playlist.setOwner(new User(rs.getString("owner"), rs.getString("password")));
                 playlists.add(playlist);
+                //add to static list if it don't exist. or not. to much work if used much.
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -66,16 +73,30 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
     }
 
     protected void doInsert (DomainObject subject, PreparedStatement insertStatement) throws SQLException {
-            Playlist playlist = (Playlist) subject;
-            insertStatement.setString(1, playlist.getName());
-            insertStatement.setString(2, playlist.getOwner().getUserName());
-            playlists.add(playlist);
+        Playlist playlist = (Playlist) subject;
+        insertStatement.setString(1, playlist.getName());
+        insertStatement.setString(2, playlist.getOwner().getUserName());
+        playlists.add(playlist);
+    }
+
+    protected void doUpdate (DomainObject subject, PreparedStatement insertStatement) throws SQLException {
+        Playlist playlist = (Playlist) subject;
+        insertStatement.setString(1, playlist.getName());
+        insertStatement.setString(2, playlist.getOwner().getUserName());
+        insertStatement.setLong(3, playlist.getId());
+    }
+
+    protected void doDelete (DomainObject subject, PreparedStatement insertStatement) throws SQLException {
+//        Playlist playlist = (Playlist) subject;
+//        insertStatement.setString(1, playlist.getName());
+//        insertStatement.setString(2, playlist.getOwner().getUserName());
+//        playlists.add(playlist);
     }
 
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> returnList = new ArrayList<>();
-        for(Object o : abstractFindAll()){
+        for(DomainObject o : abstractFindAll()){
             try{
                 returnList.add((Playlist) o);
             } catch (Exception e) {
