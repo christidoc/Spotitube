@@ -22,11 +22,11 @@ public class AbonnementMapper extends AbstractMapper {
     }
 
     protected final String insertStatement() {
-        return "INSERT INTO abonnement (abonneeID, dienstID, startdatum, einddatum, gedeeld, verdubbeld) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO abonnement (abonneeID, dienstID, startdatum, einddatum, verdubbeld) VALUES (?, ?, ?, ?, ?)";
     }
 
     protected final String updateStatement() {
-        return "UPDATE abonnement SET abonneeID = ?, dienstID = ?, startdatum = ?, einddatum = ?, gedeeld = ?, verdubbeld = ? WHERE id = ?";
+        return "UPDATE abonnement SET abonneeID = ?, dienstID = ?, startdatum = ?, einddatum = ?, verdubbeld = ? WHERE id = ?";
     }
 
     protected final String deleteStatement() {
@@ -39,28 +39,12 @@ public class AbonnementMapper extends AbstractMapper {
 
     protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
         Dienst dienst = Dienst.getDienst(rs.getInt("dienstID"));
+        int abonneeID = rs.getInt("abonneeID");
         Date startdatum = rs.getDate("startdatum");
         Date einddatum = rs.getDate("einddatum");
         boolean verdubbeld = rs.getBoolean("verdubbeld");
         int[] gedeeld = new int[2];
-        if(rs.getBoolean("gedeeld")){
-            gedeeld[0] = 0;
-            gedeeld[1] = 0;
-            PreparedStatement findStatement = null;
-            Connection DB = mySQLConnector.getConnection();
-            findStatement = DB.prepareStatement("SELECT * FROM gedeeld WHERE abonnementID = ?");
-            findStatement.setInt(1, id);
-            ResultSet rs2 = findStatement.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-                gedeeld[i] = rs2.getInt("abonneeID");
-                if(i == 1){
-                    break;
-                }
-                i++;
-            }
-        }
-        return new Abonnement(id, dienst, startdatum, einddatum, verdubbeld, gedeeld);
+        return new Abonnement(id, abonneeID, dienst, startdatum, einddatum, verdubbeld, gedeeld);
     }
 
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws  SQLException{
@@ -72,54 +56,76 @@ public class AbonnementMapper extends AbstractMapper {
                 Date startdatum = rs.getDate("startdatum");
                 Date einddatum = rs.getDate("einddatum");
                 boolean verdubbeld = rs.getBoolean("verdubbeld");
-                boolean gedeeld = rs.getBoolean("gedeeld");
-                returnList.add(new Abonnement(abonnementID, dienst, startdatum, einddatum, verdubbeld, gedeeld));
+                int[] gedeeld = new int[2];
+                returnList.add(new Abonnement(abonnementID, id, dienst, startdatum, einddatum, verdubbeld, gedeeld));
             }
         }
         return returnList;
     }
 
     protected void doInsert (DomainObject subject, PreparedStatement insertStatement) throws SQLException {
-        //insertStatement.setInt(1, subject.getId());
-        Dienst dienst = (Dienst) subject;
-        dienst.setId(findNextDatabaseId());
-        insertStatement.setString(1, dienst.getAanbieder());
-        insertStatement.setString(2, dienst.getNaam());
-        insertStatement.setInt(3, dienst.getMaandprijs());
-        insertStatement.setInt(4, dienst.getHalfjaarprijs());
-        insertStatement.setInt(5, dienst.getJaarprijs());
-        insertStatement.setBoolean(6, dienst.isDeelbaar());
-        insertStatement.setBoolean(7, dienst.isVerdubbeling());
+        Abonnement abonnement = (Abonnement) subject;
+        abonnement.setId(findNextDatabaseId());
+        insertStatement.setInt(1, abonnement.getAbonneeID());
+        insertStatement.setInt(2, abonnement.getDienst().getId());
+        //insertStatement.setDate(3, abonnement.getStart());
+        //insertStatement.setDate(4, abonnement.getEnd());
+        insertStatement.setBoolean(5, abonnement.isVerdubbeld());
     }
 
-    public void update (Dienst dienst){
+    public void update (Abonnement abonnement){
         PreparedStatement updateStatement = null;
         Connection DB = mySQLConnector.getConnection();
         try {
             updateStatement = DB.prepareStatement(updateStatement());
-            updateStatement.setString(1, dienst.getAanbieder());
-            updateStatement.setString(2, dienst.getNaam());
-            updateStatement.setInt(3, dienst.getMaandprijs());
-            updateStatement.setInt(4, dienst.getHalfjaarprijs());
-            updateStatement.setInt(5, dienst.getJaarprijs());
-            updateStatement.setBoolean(6, dienst.isDeelbaar());
-            updateStatement.setBoolean(7, dienst.isVerdubbeling());
-            updateStatement.setInt(8, dienst.getId());
+            updateStatement.setInt(1, abonnement.getAbonneeID());
+            updateStatement.setInt(2, abonnement.getDienst().getId());
+            //updateStatement.setDate(3, abonnement.getStart());
+            //updateStatement.setDate(4, abonnement.getEnd());
+            updateStatement.setBoolean(5, abonnement.isVerdubbeld());
             updateStatement.execute();
+            //Fix de gedeelden.
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public List<Dienst> getAllDiensten(){
-        List<Dienst> returnlist = new ArrayList<>();
-        for(DomainObject o : findAll()){
-            returnlist.add((Dienst) o);
+    public List<Abonnement> getAllAbonnementen(int aboneeID){
+        List<Abonnement> returnlist = new ArrayList<>();
+        for(DomainObject o : findAll(aboneeID)){
+            returnlist.add((Abonnement) o);
         }
         return returnlist;
     }
 
-    public Dienst getDienst(int id){
-        return (Dienst)find(id);
+    public Abonnement getAbonnement(int id){
+        return (Abonnement)find(id);
+    }
+
+    private int[] getGedeeld(Abonnement abonnement, int id){
+        int[] returnArray = new int[2];
+        if(abonnement.getDienst().isDeelbaar()){
+            returnArray[0] = 0;
+            returnArray[1] = 0;
+            PreparedStatement findStatement = null;
+            Connection DB = mySQLConnector.getConnection();
+            try {
+                findStatement = DB.prepareStatement("SELECT * FROM gedeeld WHERE abonnementID = ?");
+                findStatement.setInt(1, id);
+                ResultSet rs = findStatement.executeQuery();
+                int i = 0;
+                while (rs.next()) {
+                    returnArray[i] = rs.getInt("abonneeID");
+                    if (i == 1) {
+                        break;
+                    }
+                    i++;
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return returnArray;
     }
 }

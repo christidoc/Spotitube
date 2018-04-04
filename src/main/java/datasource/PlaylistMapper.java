@@ -57,7 +57,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
         return playlist;
     }
 
-    protected List<DomainObject> doLoadAll (ResultSet rs) throws SQLException {
+    protected List<DomainObject> doLoadAll (int id, ResultSet rs) throws SQLException {
         List<DomainObject> playlists = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -98,7 +98,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> returnList = new ArrayList<>();
-        for(DomainObject o : findAll()){
+        for(DomainObject o : findAll(0)){
             try{
                 returnList.add((Playlist) o);
             } catch (Exception e) {

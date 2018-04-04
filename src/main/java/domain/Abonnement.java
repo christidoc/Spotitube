@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Abonnement extends DomainObject{
     public static AbonnementMapper AbonnementMapper = new AbonnementMapper();
+    private int abonneeID;
     private Dienst dienst;
     private Date start;
     private Date end;
@@ -15,13 +16,22 @@ public class Abonnement extends DomainObject{
         gedeeld = new int[2];
     }
 
-    public Abonnement(int id, Dienst dienst, Date start, Date end, boolean verdubbeld, int[] gedeeld) {
+    public Abonnement(int id, int abonneeID, Dienst dienst, Date start, Date end, boolean verdubbeld, int[] gedeeld) {
         super(id);
+        this.abonneeID = abonneeID;
         this.dienst = dienst;
         this.start = start;
         this.end = end;
         this.verdubbeld = verdubbeld;
         this.gedeeld = gedeeld;
+    }
+
+    public int getAbonneeID() {
+        return abonneeID;
+    }
+
+    public void setAbonneeID(int abonneeID) {
+        abonneeID = abonneeID;
     }
 
     public Dienst getDienst() {
