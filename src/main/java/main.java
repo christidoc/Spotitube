@@ -23,10 +23,12 @@ public class main {
 //            //System.out.println(p.getName() + "     " + user.getUserName());
 //        }
 //
-        Playlist playlist = Playlist.getPlaylist(10);
-        User user = new User("user", "password");
-        playlist.setOwner(user);
-        playlist.setName("Updated");
-        playlist.update();
+//        Playlist playlist = Playlist.getPlaylist(10);
+//        User user = new User("user", "password");
+//        playlist.setOwner(user);
+//        playlist.setName("Updated");
+//        playlist.update();
+        int[] ar = new int[3];
+        System.out.println(ar[2]);
     }
 }

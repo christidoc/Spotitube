@@ -33,6 +33,10 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
         return "UPDATE playlist SET name = ?, owner = ? WHERE id = ?";
     }
 
+    protected  final String findNextDatabaseIdStatement() {
+        return "";
+    }
+
 
     public PlaylistMapper() {
         if(playlists == null){
@@ -40,9 +44,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
         }
     }
 
-    protected DomainObject load(ResultSet rs) throws SQLException {
-        int id = rs.getInt("id");
-        System.out.println("load playlist with id: " + id);
+    protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
         for(Playlist playlist : playlists){
             if(playlist.getId() == id){
                 return playlist;
@@ -55,7 +57,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
         return playlist;
     }
 
-    protected List<DomainObject> loadAll (ResultSet rs) throws SQLException {
+    protected List<DomainObject> doLoadAll (ResultSet rs) throws SQLException {
         List<DomainObject> playlists = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -96,7 +98,7 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
     @Override
     public List<Playlist> getAllPlaylists() {
         List<Playlist> returnList = new ArrayList<>();
-        for(DomainObject o : abstractFindAll()){
+        for(DomainObject o : findAll()){
             try{
                 returnList.add((Playlist) o);
             } catch (Exception e) {
@@ -130,6 +132,6 @@ public class PlaylistMapper extends AbstractMapper implements PlaylistDAO{
                 return playlist;
             }
         }
-        return (Playlist) abstractFind(id);
+        return (Playlist) find(id);
     }
 }

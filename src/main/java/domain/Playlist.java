@@ -106,6 +106,5 @@ public class Playlist extends DomainObject{
     }
 
     public void update (){
-        playlistMapper.update(this);
     }
 }
