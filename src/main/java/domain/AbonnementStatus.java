@@ -1,7 +1,7 @@
 package domain;
 
 public enum AbonnementStatus {
-    OPGEZEGD("ogpezegd"),
+    OPGEZEGD("opgezegd"),
     ACTIEF("actief"),
     PROEF("proef");
 

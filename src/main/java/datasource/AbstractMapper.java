@@ -62,9 +62,13 @@ abstract class AbstractMapper {
         PreparedStatement insertStatement;
         Connection DB = mySQLConnector.getConnection();
         try {
-            insertStatement = DB.prepareStatement(insertStatement());
+            insertStatement = DB.prepareStatement(insertStatement(), Statement.RETURN_GENERATED_KEYS);
             doInsert(subject, insertStatement);
             insertStatement.execute();
+            ResultSet rs = insertStatement.getGeneratedKeys();
+            rs.next();
+            int key = rs.getInt(1);
+            subject.setId(key);
             loadedMap.put(subject.getId(), subject);
             return subject.getId();
         } catch (SQLException e) {

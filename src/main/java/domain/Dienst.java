@@ -29,6 +29,10 @@ public class Dienst extends DomainObject{
         this.verdubbeling = verdubbeling;
     }
 
+    public String toString(){
+        return "id: " + getId() + ". aanbieder: " + getAanbieder() + ". naam: " + getNaam();
+    }
+
     public static List<Dienst> getAllDiensten (){
         return dienstMapper.getAllDiensten();
     }

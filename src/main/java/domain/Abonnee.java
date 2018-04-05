@@ -1,6 +1,7 @@
 package domain;
 
 import datasource.AbonneeMapper;
+import datasource.AbonnementMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class Abonnee extends DomainObject{
 
     public void addAbonnement(Abonnement abonnement){
         abonnements.add(abonnement);
+        abonnement.insert();
     }
 
 
@@ -71,6 +73,7 @@ public class Abonnee extends DomainObject{
     }
 
     public List<Abonnement> getAbonnements() {
+        abonnements = abonneeMapper.getAllAbonnementen(getId());
         return abonnements;
     }
 

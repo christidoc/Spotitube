@@ -3,6 +3,7 @@ package service;
 import domain.*;
 import presentation.dto.Verdubbeling;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +13,18 @@ public class AbonnementService{
         return abonnee.getAbonnements();
     }
 
-    public void addAbonnement(ActiveUser user, int dienstID, String aanbieder, String dienstName){
+    public void addAbonnement(ActiveUser user, int dienstID){
         Abonnee abonnee = Abonnee.getAbonnee(user.getUserName());
         Dienst dienst = Dienst.getDienst(dienstID);
         Abonnement abonnement = new Abonnement();
         abonnement.setAbonneeID(abonnee.getId());
         abonnement.setDienst(dienst);
-        abonnement.insert();
+        //Wegens gebrek aan informatie uit de front-end zijn hier wat default values.
+        abonnement.setStart(LocalDate.now());
+        abonnement.setEnd(abonnement.getStart().plusMonths(1));
+        abonnement.setVerdubbeling(VerdubbelingStatus.STANDAARD);
+        abonnement.setLengte(LengteStatus.MAAND);
+        abonnement.setStatus(AbonnementStatus.ACTIEF);
         abonnee.addAbonnement(abonnement);
     }
 
@@ -71,7 +77,7 @@ public class AbonnementService{
         if(filter != null && !filter.isEmpty()) {
             List<Dienst> returnDiensten = new ArrayList<>();
             for (Dienst d : diensten) {
-                if(d.getAanbieder().equals(filter)){
+                if(d.getAanbieder().getName().equals(filter)){
                     returnDiensten.add(d);
                 }
             }

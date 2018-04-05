@@ -33,7 +33,7 @@ public class AbonneeMapper  extends AbstractMapper{
     }
 
     protected final String findNextDatabaseIdStatement() {
-        return "";
+        return "SHOW TABLE STATUS FROM abonnee LIKE Auto_increment";
     }
 
     protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
@@ -44,13 +44,15 @@ public class AbonneeMapper  extends AbstractMapper{
     }
 
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws  SQLException{
+        System.out.println("doLoadAll");
         List<DomainObject> returnList = new ArrayList<>();
         while (rs.next()) {
-            if(id == rs.getInt("abonneeID") || id == 0) {
+            int domainObjectID = rs.getInt("id");
+            if(id == domainObjectID || id == 0) {
                 String mail = rs.getString("mail");
                 String name = rs.getString("name");
                 String password = rs.getString("password");
-                returnList.add(new Abonnee(id, mail, name, password));
+                returnList.add(new Abonnee(domainObjectID, mail, name, password));
             }
         }
         return returnList;

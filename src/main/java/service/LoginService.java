@@ -1,6 +1,7 @@
 package service;
 
 import datasource.UserDAO;
+import domain.Abonnee;
 import domain.User;
 
 import javax.inject.Inject;
@@ -45,13 +46,13 @@ public class LoginService {
     }
 
     public ActiveUser loginUser(String username, String password) {
-        if(username != null && password != null) {
-            List<User> users = mySQLUserDAO.getAllUsers();
-            for (User user : users) {
-                if (username.equals(user.getUserName()) && password.equals(user.getPassword())) {
+        if (username != null && password != null) {
+            List<Abonnee> abonnees = Abonnee.getAllAbonnees();
+            for (Abonnee abonnee : abonnees) {
+                if (username.equals(abonnee.getName()) && password.equals(abonnee.getPassword())) {
                     for (int i = 0; i < 10; i++) {
                         String token = tokenService.getRandomToken();
-                        ActiveUser activeUser = new ActiveUser(user.getUserName(), token);
+                        ActiveUser activeUser = new ActiveUser(abonnee.getName(), token);
                         if (addUser(activeUser)) {
                             return activeUser;
                         }

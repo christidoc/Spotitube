@@ -1,9 +1,8 @@
 import datasource.MySQLPlaylistDAO;
-import domain.AanbiederStatus;
-import domain.Abonnee;
-import domain.Playlist;
-import domain.User;
+import domain.*;
+import service.AbonnementService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,30 +11,10 @@ import java.util.List;
  */
 public class main {
     public static void main (String [] args){
-//        User user = new User("user", "password");
-//        Playlist playlist = new Playlist();
-//        playlist.setName("newplaylist");
-//        playlist.setOwner(user);
-//        playlist.insert();
-
-//        List<Playlist> playlists = Playlist.getAllPlaylists();
-//        for(Playlist p : playlists){
-//            User user = p.getOwner();
-//            System.out.println(p.getName());
-//            //System.out.println(p.getName() + "     " + user.getUserName());
-//        }
-//
-//        Playlist playlist = Playlist.getPlaylist(10);
-//        User user = new User("user", "password");
-//        playlist.setOwner(user);
-//        playlist.setName("Updated");
-//        playlist.update();
-//        int[] ar = new int[3];
-//        System.out.println(ar[2]);
-//        Abonnee abonnee = new Abonnee(1, "iets@wat.nl", "Christidoc", "wachtwoord");
-//        System.out.println(abonnee.toString());
-
-        int[] ints = new int[2];
-        System.out.println(ints[1]);
+        AbonnementService abonnementService = new AbonnementService();
+        List<Dienst> diensten = abonnementService.getAvailableAbonnementen("vodafone");
+        for(Dienst d : diensten){
+            System.out.println(d.toString());
+        }
     }
 }

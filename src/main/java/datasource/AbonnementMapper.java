@@ -20,11 +20,11 @@ public class AbonnementMapper extends AbstractMapper {
     }
 
     protected final String insertStatement() {
-        return "INSERT INTO abonnement (abonneeID, dienstID, startdatum, einddatum, verdubbeld) VALUES (?, ?, ?, ?, ?)";
+        return "INSERT INTO abonnement (abonneeID, dienstID, startdatum, einddatum, verdubbeling, lengte, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
     }
 
     protected final String updateStatement() {
-        return "UPDATE abonnement SET abonneeID = ?, dienstID = ?, startdatum = ?, einddatum = ?, verdubbeld = ? WHERE id = ?";
+        return "UPDATE abonnement SET abonneeID = ?, dienstID = ?, startdatum = ?, einddatum = ?, verdubbeling = ?, lengte = ?, status = ? WHERE id = ?";
     }
 
     protected final String deleteStatement() {
@@ -32,7 +32,7 @@ public class AbonnementMapper extends AbstractMapper {
     }
 
     protected final String findNextDatabaseIdStatement() {
-        return "";
+        return "SHOW TABLE STATUS LIKE 'abonnement'";
     }
 
     protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
@@ -41,7 +41,7 @@ public class AbonnementMapper extends AbstractMapper {
         LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
         LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
         VerdubbelingStatus verdubbeling = null;
-        switch (rs.getString("verdubbeld")) {
+        switch (rs.getString("verdubbeling")) {
             case "standaard":
                 verdubbeling = VerdubbelingStatus.STANDAARD;
                 break;
@@ -53,7 +53,7 @@ public class AbonnementMapper extends AbstractMapper {
                 break;
         }
         LengteStatus lengte = null;
-        switch (rs.getString("verdubbeld")) {
+        switch (rs.getString("lengte")) {
             case "maand":
                 lengte = LengteStatus.MAAND;
                 break;
@@ -65,7 +65,7 @@ public class AbonnementMapper extends AbstractMapper {
                 break;
         }
         AbonnementStatus status = null;
-        switch (rs.getString("verdubbeld")) {
+        switch (rs.getString("status")) {
             case "proef":
                 status = AbonnementStatus.PROEF;
                 break;
@@ -83,13 +83,13 @@ public class AbonnementMapper extends AbstractMapper {
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws  SQLException{
         List<DomainObject> returnList = new ArrayList<>();
         while (rs.next()) {
+            int domainObjectID = rs.getInt("id");
             if(id == rs.getInt("abonneeID") || id == 0) {
-                int abonnementID = rs.getInt("id");
                 Dienst dienst = Dienst.getDienst(rs.getInt("dienstID"));
                 LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
                 LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
                 VerdubbelingStatus verdubbeling = null;
-                switch (rs.getString("verdubbeld")) {
+                switch (rs.getString("verdubbeling")) {
                     case "standaard":
                         verdubbeling = VerdubbelingStatus.STANDAARD;
                         break;
@@ -101,7 +101,7 @@ public class AbonnementMapper extends AbstractMapper {
                         break;
                 }
                 LengteStatus lengte = null;
-                switch (rs.getString("verdubbeld")) {
+                switch (rs.getString("lengte")) {
                     case "maand":
                         lengte = LengteStatus.MAAND;
                         break;
@@ -113,7 +113,7 @@ public class AbonnementMapper extends AbstractMapper {
                         break;
                 }
                 AbonnementStatus status = null;
-                switch (rs.getString("verdubbeld")) {
+                switch (rs.getString("status")) {
                     case "proef":
                         status = AbonnementStatus.PROEF;
                         break;
@@ -125,7 +125,7 @@ public class AbonnementMapper extends AbstractMapper {
                         break;
                 }
                 int[] gedeeld = new int[2];
-                returnList.add(new Abonnement(abonnementID, id, dienst, startdatum, einddatum, verdubbeling, gedeeld, lengte, status));
+                returnList.add(new Abonnement(domainObjectID, id, dienst, startdatum, einddatum, verdubbeling, gedeeld, lengte, status));
             }
         }
         return returnList;
@@ -133,12 +133,13 @@ public class AbonnementMapper extends AbstractMapper {
 
     protected void doInsert (DomainObject subject, PreparedStatement insertStatement) throws SQLException {
         Abonnement abonnement = (Abonnement) subject;
-        abonnement.setId(findNextDatabaseId());
         insertStatement.setInt(1, abonnement.getAbonneeID());
         insertStatement.setInt(2, abonnement.getDienst().getId());
         insertStatement.setDate(3, java.sql.Date.valueOf(abonnement.getStart()));
         insertStatement.setDate(4, java.sql.Date.valueOf(abonnement.getEnd()));
         insertStatement.setString(5, abonnement.getVerdubbeling().getName());
+        insertStatement.setString(6, abonnement.getLengte().getName());
+        insertStatement.setString(7, abonnement.getStatus().getName());
     }
 
     public void update (Abonnement abonnement){
@@ -148,9 +149,12 @@ public class AbonnementMapper extends AbstractMapper {
             updateStatement = DB.prepareStatement(updateStatement());
             updateStatement.setInt(1, abonnement.getAbonneeID());
             updateStatement.setInt(2, abonnement.getDienst().getId());
-            //updateStatement.setDate(3, abonnement.getStart());
-            //updateStatement.setDate(4, abonnement.getEnd());
+            updateStatement.setDate(3, java.sql.Date.valueOf(abonnement.getStart()));
+            updateStatement.setDate(4, java.sql.Date.valueOf(abonnement.getEnd()));
             updateStatement.setString(5, abonnement.getVerdubbeling().getName());
+            updateStatement.setString(6, abonnement.getLengte().getName());
+            updateStatement.setString(7, abonnement.getStatus().getName());
+            updateStatement.setInt(8, abonnement.getId());
             updateStatement.execute();
             //Fix de gedeelden.
         } catch (Exception e){
@@ -174,7 +178,7 @@ public class AbonnementMapper extends AbstractMapper {
         PreparedStatement insertStatement = null;
         Connection DB = mySQLConnector.getConnection();
         try{
-            insertStatement = DB.prepareStatement("INSERT INTO gedeeld (abonnementID, abonneeIDd) VALUES (?, ?)");
+            insertStatement = DB.prepareStatement("INSERT INTO gedeeld (abonnementID, abonneeID) VALUES (?, ?)");
             insertStatement.setInt(1, abonnement.getId());
             insertStatement.setInt(2, id);
             insertStatement.execute();

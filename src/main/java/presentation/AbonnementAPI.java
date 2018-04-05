@@ -32,11 +32,11 @@ public class AbonnementAPI {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Abonnementenresponse Addabonnement (@QueryParam("token") String token,
+    public Abonnementenresponse addAbonnement (@QueryParam("token") String token,
                                           AbonnementDTO abonnementDTO){
         ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
-            abonnementService.addAbonnement(user, abonnementDTO.getId(), abonnementDTO.getAanbieder(), abonnementDTO.getDienst());
+            abonnementService.addAbonnement(user, abonnementDTO.getId());
             List<Abonnement> abonnements = abonnementService.getAbonnementenbyUser(user);
             return new Abonnementenresponse(abonnements);
         }

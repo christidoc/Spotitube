@@ -59,7 +59,7 @@ public class Abonnement extends DomainObject{
     }
 
     public void setAbonneeID(int abonneeID) {
-        abonneeID = abonneeID;
+        this.abonneeID = abonneeID;
     }
 
     public Dienst getDienst() {

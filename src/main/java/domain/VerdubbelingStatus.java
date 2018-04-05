@@ -1,7 +1,5 @@
 package domain;
 
-import presentation.dto.Verdubbeling;
-
 public enum VerdubbelingStatus {
     STANDAARD("standaard"),
     VERDUBBELD("verdubbeld"),
