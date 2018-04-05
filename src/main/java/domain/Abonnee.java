@@ -28,6 +28,10 @@ public class Abonnee extends DomainObject{
         return abonneeMapper.getAbonneeByName(username);
     }
 
+    public static List<Abonnee> getAllAbonnees(){
+        return abonneeMapper.getAllAbonnees();
+    }
+
     public void addAbonnement(Abonnement abonnement){
         abonnements.add(abonnement);
     }

@@ -170,6 +170,19 @@ public class AbonnementMapper extends AbstractMapper {
         return (Abonnement)find(id);
     }
 
+    public void addGedeeld(Abonnement abonnement, int id){
+        PreparedStatement insertStatement = null;
+        Connection DB = mySQLConnector.getConnection();
+        try{
+            insertStatement = DB.prepareStatement("INSERT INTO gedeeld (abonnementID, abonneeIDd) VALUES (?, ?)");
+            insertStatement.setInt(1, abonnement.getId());
+            insertStatement.setInt(2, id);
+            insertStatement.execute();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     private int[] getGedeeld(Abonnement abonnement, int id){
         int[] returnArray = new int[2];
         if(abonnement.getDienst().isDeelbaar()){

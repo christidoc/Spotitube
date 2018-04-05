@@ -69,6 +69,14 @@ public class AbonneeMapper  extends AbstractMapper{
         return abonnementMapper.getAllAbonnementen(abonneeID);
     }
 
+    public List<Abonnee> getAllAbonnees(){
+        List<Abonnee> returnlist = new ArrayList<>();
+        for(DomainObject o : findAll(0)){
+            returnlist.add((Abonnee) o);
+        }
+        return returnlist;
+    }
+
     public Abonnee getAbonneeByName(String name){
         PreparedStatement findStatement = null;
         Connection DB = mySQLConnector.getConnection();

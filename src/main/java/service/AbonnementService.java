@@ -79,4 +79,9 @@ public class AbonnementService{
         }
         return diensten;
     }
+
+    public void shareAbonnement(ActiveUser user, int abonnementID, int abonneeID){
+        Abonnement abonnement = getAbonnementbyUser(user, abonnementID);
+        abonnement.addDeling(abonneeID);
+    }
 }

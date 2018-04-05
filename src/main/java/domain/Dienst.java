@@ -8,9 +8,9 @@ public class Dienst extends DomainObject{
     public static DienstMapper dienstMapper = new DienstMapper();
     private AanbiederStatus aanbieder;
     private String naam;
-    private int maandprijs;
-    private int halfjaarprijs;
-    private int jaarprijs;
+    private double maandprijs;
+    private double halfjaarprijs;
+    private double jaarprijs;
     private boolean deelbaar;
     private boolean verdubbeling;
 
@@ -18,7 +18,7 @@ public class Dienst extends DomainObject{
 
     }
 
-    public Dienst(int id, AanbiederStatus aanbieder, String naam, int maandprijs, int halfjaarprijs, int jaarprijs, boolean deelbaar, boolean verdubbeling) {
+    public Dienst(int id, AanbiederStatus aanbieder, String naam, double maandprijs, double halfjaarprijs, double jaarprijs, boolean deelbaar, boolean verdubbeling) {
         super(id);
         this.aanbieder = aanbieder;
         this.naam = naam;
@@ -65,27 +65,27 @@ public class Dienst extends DomainObject{
         this.naam = naam;
     }
 
-    public int getMaandprijs() {
+    public double getMaandprijs() {
         return maandprijs;
     }
 
-    public void setMaandprijs(int maandprijs) {
+    public void setMaandprijs(double maandprijs) {
         this.maandprijs = maandprijs;
     }
 
-    public int getHalfjaarprijs() {
+    public double getHalfjaarprijs() {
         return halfjaarprijs;
     }
 
-    public void setHalfjaarprijs(int halfjaarprijs) {
+    public void setHalfjaarprijs(double halfjaarprijs) {
         this.halfjaarprijs = halfjaarprijs;
     }
 
-    public int getJaarprijs() {
+    public double getJaarprijs() {
         return jaarprijs;
     }
 
-    public void setJaarprijs(int jaarprijs) {
+    public void setJaarprijs(double jaarprijs) {
         this.jaarprijs = jaarprijs;
     }
 

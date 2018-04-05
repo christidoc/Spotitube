@@ -38,6 +38,16 @@ public class Abonnement extends DomainObject{
         abonnementMapper.update(this);
     }
 
+    public void addDeling(int abonneeID){
+        if(gedeeld[0] == 0){
+            gedeeld[0] = abonneeID;
+            abonnementMapper.addGedeeld(this, abonneeID);
+        } else if(gedeeld[1] == 0){
+            gedeeld[1] = abonneeID;
+            abonnementMapper.addGedeeld(this, abonneeID);
+        }
+    }
+
     @Override
     public String toString(){
         String returnString = "\n \t id: " + super.toString() + ". aboneeID: " + abonneeID + ". dienst: " + dienst.getNaam() + ". start " + start + ". end " + end + ".";

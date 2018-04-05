@@ -81,9 +81,9 @@ public class DienstMapper extends AbstractMapper {
         dienst.setId(findNextDatabaseId());
         insertStatement.setString(1, dienst.getAanbieder().getName());
         insertStatement.setString(2, dienst.getNaam());
-        insertStatement.setInt(3, dienst.getMaandprijs());
-        insertStatement.setInt(4, dienst.getHalfjaarprijs());
-        insertStatement.setInt(5, dienst.getJaarprijs());
+        insertStatement.setDouble(3, dienst.getMaandprijs());
+        insertStatement.setDouble(4, dienst.getHalfjaarprijs());
+        insertStatement.setDouble(5, dienst.getJaarprijs());
         insertStatement.setBoolean(6, dienst.isDeelbaar());
         insertStatement.setBoolean(7, dienst.isVerdubbeling());
     }
@@ -95,9 +95,9 @@ public class DienstMapper extends AbstractMapper {
             updateStatement = DB.prepareStatement(updateStatement());
             updateStatement.setString(1, dienst.getAanbieder().getName());
             updateStatement.setString(2, dienst.getNaam());
-            updateStatement.setInt(3, dienst.getMaandprijs());
-            updateStatement.setInt(4, dienst.getHalfjaarprijs());
-            updateStatement.setInt(5, dienst.getJaarprijs());
+            updateStatement.setDouble(3, dienst.getMaandprijs());
+            updateStatement.setDouble(4, dienst.getHalfjaarprijs());
+            updateStatement.setDouble(5, dienst.getJaarprijs());
             updateStatement.setBoolean(6, dienst.isDeelbaar());
             updateStatement.setBoolean(7, dienst.isVerdubbeling());
             updateStatement.setInt(8, dienst.getId());

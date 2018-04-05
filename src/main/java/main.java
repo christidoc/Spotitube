@@ -34,8 +34,8 @@ public class main {
 //        System.out.println(ar[2]);
 //        Abonnee abonnee = new Abonnee(1, "iets@wat.nl", "Christidoc", "wachtwoord");
 //        System.out.println(abonnee.toString());
-        AanbiederStatus aanbiederStatus = null;
-        aanbiederStatus = AanbiederStatus.ZIGGO;
-        System.out.println(aanbiederStatus.getName());
+
+        int[] ints = new int[2];
+        System.out.println(ints[1]);
     }
 }

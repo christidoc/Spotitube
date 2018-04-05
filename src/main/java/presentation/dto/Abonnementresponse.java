@@ -19,7 +19,7 @@ public class Abonnementresponse {
         id = dienst.getId();
         aanbieder = dienst.getAanbieder().getName();
         this.dienst = dienst.getNaam();
-        prijs = Integer.toString(dienst.getMaandprijs());
+        prijs = Double.toString(dienst.getMaandprijs());
         verdubbeling = abonnement.getVerdubbeling().getName();
         deelbaar = dienst.isDeelbaar();
         status = abonnement.getStatus().getName();
@@ -29,7 +29,7 @@ public class Abonnementresponse {
         id = abonnement.getDienst().getId();
         aanbieder = abonnement.getDienst().getAanbieder().getName();
         this.dienst = abonnement.getDienst().getNaam();
-        prijs = Integer.toString(abonnement.getDienst().getMaandprijs());
+        prijs = Double.toString(abonnement.getDienst().getMaandprijs());
         verdubbeling = abonnement.getVerdubbeling().getName();
         deelbaar = abonnement.getDienst().isDeelbaar();
         status = abonnement.getStatus().getName();
