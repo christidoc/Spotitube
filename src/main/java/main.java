@@ -1,4 +1,5 @@
 import datasource.MySQLPlaylistDAO;
+import domain.AanbiederStatus;
 import domain.Abonnee;
 import domain.Playlist;
 import domain.User;
@@ -31,7 +32,10 @@ public class main {
 //        playlist.update();
 //        int[] ar = new int[3];
 //        System.out.println(ar[2]);
-        Abonnee abonnee = new Abonnee(1, "iets@wat.nl", "Christidoc", "wachtwoord");
-        System.out.println(abonnee.toString());
+//        Abonnee abonnee = new Abonnee(1, "iets@wat.nl", "Christidoc", "wachtwoord");
+//        System.out.println(abonnee.toString());
+        AanbiederStatus aanbiederStatus = null;
+        aanbiederStatus = AanbiederStatus.ZIGGO;
+        System.out.println(aanbiederStatus.getName());
     }
 }

@@ -2,6 +2,7 @@ package presentation.dto;
 
 import domain.Abonnement;
 import domain.Dienst;
+import domain.VerdubbelingStatus;
 
 public class Abonnementresponse {
     private int id;
@@ -16,38 +17,22 @@ public class Abonnementresponse {
 
     public Abonnementresponse(Abonnement abonnement, Dienst dienst){
         id = dienst.getId();
-        aanbieder = dienst.getAanbieder();
+        aanbieder = dienst.getAanbieder().getName();
         this.dienst = dienst.getNaam();
         prijs = Integer.toString(dienst.getMaandprijs());
-        verdubbeling = "standaard";
-        if(dienst.isVerdubbeling()){
-            verdubbeling = "niet-beschikbaar";
-        }
-        else{
-            if(abonnement.isVerdubbeld()){
-                verdubbeling = "verdubbeld";
-            }
-        }
+        verdubbeling = abonnement.getVerdubbeling().getName();
         deelbaar = dienst.isDeelbaar();
-        status = abonnement.getStatus();
+        status = abonnement.getStatus().getName();
     }
 
     public Abonnementresponse(Abonnement abonnement){
         id = abonnement.getDienst().getId();
-        aanbieder = abonnement.getDienst().getAanbieder();
+        aanbieder = abonnement.getDienst().getAanbieder().getName();
         this.dienst = abonnement.getDienst().getNaam();
         prijs = Integer.toString(abonnement.getDienst().getMaandprijs());
-        verdubbeling = "standaard";
-        if(abonnement.getDienst().isVerdubbeling()){
-            verdubbeling = "niet-beschikbaar";
-        }
-        else{
-            if(abonnement.isVerdubbeld()){
-                verdubbeling = "verdubbeld";
-            }
-        }
+        verdubbeling = abonnement.getVerdubbeling().getName();
         deelbaar = abonnement.getDienst().isDeelbaar();
-        status = abonnement.getStatus();
+        status = abonnement.getStatus().getName();
     }
 
     public int getId() {

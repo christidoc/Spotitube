@@ -80,7 +80,7 @@ public class AbonnementAPI {
                                             Verdubbeling verdubbeling) {
         ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
-            Abonnement abonnement = abonnementService.upgradeAbonnement(user, abonnementID, verdubbeling);
+            Abonnement abonnement = abonnementService.upgradeAbonnement(user, abonnementID, verdubbeling.getVerdubbeling());
             return new Abonnementresponse(abonnement);
         }
         return null;

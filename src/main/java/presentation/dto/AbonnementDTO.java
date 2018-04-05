@@ -1,13 +1,15 @@
 package presentation.dto;
 
+import domain.AanbiederStatus;
+
 public class AbonnementDTO {
     private int id;
     private String aanbieder;
     private String dienst;
 
-    public AbonnementDTO(int id, String aanbieder, String dienst) {
+    public AbonnementDTO(int id, AanbiederStatus aanbiederStatus, String dienst) {
         this.id = id;
-        this.aanbieder = aanbieder;
+        this.aanbieder = aanbiederStatus.getName();
         this.dienst = dienst;
     }
 
@@ -23,8 +25,8 @@ public class AbonnementDTO {
         return aanbieder;
     }
 
-    public void setAanbieder(String aanbieder) {
-        this.aanbieder = aanbieder;
+    public void setAanbieder(AanbiederStatus aanbiederStatus) {
+        this.aanbieder = aanbiederStatus.getName();
     }
 
     public String getDienst() {

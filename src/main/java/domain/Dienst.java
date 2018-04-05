@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Dienst extends DomainObject{
     public static DienstMapper dienstMapper = new DienstMapper();
-    private String aanbieder;
+    private AanbiederStatus aanbieder;
     private String naam;
     private int maandprijs;
     private int halfjaarprijs;
@@ -18,7 +18,7 @@ public class Dienst extends DomainObject{
 
     }
 
-    public Dienst(int id, String aanbieder, String naam, int maandprijs, int halfjaarprijs, int jaarprijs, boolean deelbaar, boolean verdubbeling) {
+    public Dienst(int id, AanbiederStatus aanbieder, String naam, int maandprijs, int halfjaarprijs, int jaarprijs, boolean deelbaar, boolean verdubbeling) {
         super(id);
         this.aanbieder = aanbieder;
         this.naam = naam;
@@ -49,11 +49,11 @@ public class Dienst extends DomainObject{
         dienstMapper.insert(this);
     }
 
-    public String getAanbieder() {
+    public AanbiederStatus getAanbieder() {
         return aanbieder;
     }
 
-    public void setAanbieder(String aanbieder) {
+    public void setAanbieder(AanbiederStatus aanbieder) {
         this.aanbieder = aanbieder;
     }
 

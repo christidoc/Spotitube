@@ -11,7 +11,16 @@ public class Abonnementenresponse {
     public Abonnementenresponse (List<Abonnement> abonnements){
         for(Abonnement abonnement : abonnements){
             abonnementen.add(new AbonnementDTO(abonnement.getDienst().getId(), abonnement.getDienst().getAanbieder(), abonnement.getDienst().getNaam()));
-            totalPrice += abonnement.getPrijs();
+            switch (abonnement.getLengte()) {
+                case MAAND:
+                    totalPrice += abonnement.getDienst().getMaandprijs();
+                    break;
+                case HALFJAAR:
+                    totalPrice += abonnement.getDienst().getHalfjaarprijs();
+                    break;
+                case JAAR:
+                    totalPrice += abonnement.getDienst().getJaarprijs();
+            }
         }
     }
 

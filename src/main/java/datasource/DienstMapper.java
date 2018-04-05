@@ -1,5 +1,6 @@
 package datasource;
 
+import domain.AanbiederStatus;
 import domain.Dienst;
 import domain.DomainObject;
 
@@ -36,20 +37,32 @@ public class DienstMapper extends AbstractMapper {
     }
 
     protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
+        AanbiederStatus aanbiederStatus = null;
         String aanbieder = rs.getString("aanbieder");
+        if("ziggo".equals(aanbieder)){
+            aanbiederStatus = AanbiederStatus.ZIGGO;
+        } else if("vodafone".equals(aanbieder)){
+            aanbiederStatus = AanbiederStatus.VODAFONE;
+        }
         String naam = rs.getString("naam");
         int maandprijs = rs.getInt("maandprijs");
         int halfjaarprijs = rs.getInt("halfjaarprijs");
         int jaarprijs = rs.getInt("jaarprijs");
         boolean deelbaar = rs.getBoolean("deelbaar");
         boolean verdubbeling = rs.getBoolean("verdubbeling");
-        return new Dienst(id, aanbieder, naam, maandprijs, halfjaarprijs, jaarprijs, deelbaar, verdubbeling);
+        return new Dienst(id, aanbiederStatus, naam, maandprijs, halfjaarprijs, jaarprijs, deelbaar, verdubbeling);
     }
 
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws SQLException{
         List<DomainObject> returnlist = new ArrayList<>();
         while (rs.next()) {
+            AanbiederStatus aanbiederStatus = null;
             String aanbieder = rs.getString("aanbieder");
+            if("ziggo".equals(aanbieder)){
+                aanbiederStatus = AanbiederStatus.ZIGGO;
+            } else if("vodafone".equals(aanbieder)){
+                aanbiederStatus = AanbiederStatus.VODAFONE;
+            }
             String naam = rs.getString("naam");
             int maandprijs = rs.getInt("maandprijs");
             int halfjaarprijs = rs.getInt("halfjaarprijs");
@@ -57,7 +70,7 @@ public class DienstMapper extends AbstractMapper {
             boolean deelbaar = rs.getBoolean("deelbaar");
             boolean verdubbeling = rs.getBoolean("verdubbeling");
             int dienstID = rs.getInt("id");
-            returnlist.add(new Dienst(dienstID, aanbieder, naam, maandprijs, halfjaarprijs, jaarprijs, deelbaar, verdubbeling));
+            returnlist.add(new Dienst(dienstID, aanbiederStatus, naam, maandprijs, halfjaarprijs, jaarprijs, deelbaar, verdubbeling));
         }
         return returnlist;
     }
@@ -66,7 +79,7 @@ public class DienstMapper extends AbstractMapper {
         //insertStatement.setInt(1, subject.getId());
         Dienst dienst = (Dienst) subject;
         dienst.setId(findNextDatabaseId());
-        insertStatement.setString(1, dienst.getAanbieder());
+        insertStatement.setString(1, dienst.getAanbieder().getName());
         insertStatement.setString(2, dienst.getNaam());
         insertStatement.setInt(3, dienst.getMaandprijs());
         insertStatement.setInt(4, dienst.getHalfjaarprijs());
@@ -80,7 +93,7 @@ public class DienstMapper extends AbstractMapper {
         Connection DB = mySQLConnector.getConnection();
         try {
             updateStatement = DB.prepareStatement(updateStatement());
-            updateStatement.setString(1, dienst.getAanbieder());
+            updateStatement.setString(1, dienst.getAanbieder().getName());
             updateStatement.setString(2, dienst.getNaam());
             updateStatement.setInt(3, dienst.getMaandprijs());
             updateStatement.setInt(4, dienst.getHalfjaarprijs());

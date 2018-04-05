@@ -1,8 +1,6 @@
 package datasource;
 
-import domain.Abonnement;
-import domain.Dienst;
-import domain.DomainObject;
+import domain.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,9 +40,44 @@ public class AbonnementMapper extends AbstractMapper {
         int abonneeID = rs.getInt("abonneeID");
         LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
         LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
-        boolean verdubbeld = rs.getBoolean("verdubbeld");
+        VerdubbelingStatus verdubbeling = null;
+        switch (rs.getString("verdubbeld")) {
+            case "standaard":
+                verdubbeling = VerdubbelingStatus.STANDAARD;
+                break;
+            case "verdubbeld":
+                verdubbeling = VerdubbelingStatus.VERDUBBELD;
+                break;
+            case "niet-beschikbaar":
+                verdubbeling = VerdubbelingStatus.NIETBESCHIKBAAR;
+                break;
+        }
+        LengteStatus lengte = null;
+        switch (rs.getString("verdubbeld")) {
+            case "maand":
+                lengte = LengteStatus.MAAND;
+                break;
+            case "halfjaar":
+                lengte = LengteStatus.HALFJAAR;
+                break;
+            case "jaar":
+                lengte = LengteStatus.JAAR;
+                break;
+        }
+        AbonnementStatus status = null;
+        switch (rs.getString("verdubbeld")) {
+            case "proef":
+                status = AbonnementStatus.PROEF;
+                break;
+            case "actief":
+                status = AbonnementStatus.ACTIEF;
+                break;
+            case "opgezegd":
+                status = AbonnementStatus.OPGEZEGD;
+                break;
+        }
         int[] gedeeld = new int[2];
-        return new Abonnement(id, abonneeID, dienst, startdatum, einddatum, verdubbeld, gedeeld);
+        return new Abonnement(id, abonneeID, dienst, startdatum, einddatum, verdubbeling, gedeeld, lengte, status);
     }
 
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws  SQLException{
@@ -55,9 +88,44 @@ public class AbonnementMapper extends AbstractMapper {
                 Dienst dienst = Dienst.getDienst(rs.getInt("dienstID"));
                 LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
                 LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
-                boolean verdubbeld = rs.getBoolean("verdubbeld");
+                VerdubbelingStatus verdubbeling = null;
+                switch (rs.getString("verdubbeld")) {
+                    case "standaard":
+                        verdubbeling = VerdubbelingStatus.STANDAARD;
+                        break;
+                    case "verdubbeld":
+                        verdubbeling = VerdubbelingStatus.VERDUBBELD;
+                        break;
+                    case "niet-beschikbaar":
+                        verdubbeling = VerdubbelingStatus.NIETBESCHIKBAAR;
+                        break;
+                }
+                LengteStatus lengte = null;
+                switch (rs.getString("verdubbeld")) {
+                    case "maand":
+                        lengte = LengteStatus.MAAND;
+                        break;
+                    case "halfjaar":
+                        lengte = LengteStatus.HALFJAAR;
+                        break;
+                    case "jaar":
+                        lengte = LengteStatus.JAAR;
+                        break;
+                }
+                AbonnementStatus status = null;
+                switch (rs.getString("verdubbeld")) {
+                    case "proef":
+                        status = AbonnementStatus.PROEF;
+                        break;
+                    case "actief":
+                        status = AbonnementStatus.ACTIEF;
+                        break;
+                    case "opgezegd":
+                        status = AbonnementStatus.OPGEZEGD;
+                        break;
+                }
                 int[] gedeeld = new int[2];
-                returnList.add(new Abonnement(abonnementID, id, dienst, startdatum, einddatum, verdubbeld, gedeeld));
+                returnList.add(new Abonnement(abonnementID, id, dienst, startdatum, einddatum, verdubbeling, gedeeld, lengte, status));
             }
         }
         return returnList;
@@ -70,7 +138,7 @@ public class AbonnementMapper extends AbstractMapper {
         insertStatement.setInt(2, abonnement.getDienst().getId());
         insertStatement.setDate(3, java.sql.Date.valueOf(abonnement.getStart()));
         insertStatement.setDate(4, java.sql.Date.valueOf(abonnement.getEnd()));
-        insertStatement.setBoolean(5, abonnement.isVerdubbeld());
+        insertStatement.setString(5, abonnement.getVerdubbeling().getName());
     }
 
     public void update (Abonnement abonnement){
@@ -82,7 +150,7 @@ public class AbonnementMapper extends AbstractMapper {
             updateStatement.setInt(2, abonnement.getDienst().getId());
             //updateStatement.setDate(3, abonnement.getStart());
             //updateStatement.setDate(4, abonnement.getEnd());
-            updateStatement.setBoolean(5, abonnement.isVerdubbeld());
+            updateStatement.setString(5, abonnement.getVerdubbeling().getName());
             updateStatement.execute();
             //Fix de gedeelden.
         } catch (Exception e){

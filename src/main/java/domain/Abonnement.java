@@ -9,23 +9,25 @@ public class Abonnement extends DomainObject{
     private Dienst dienst;
     private LocalDate start;
     private LocalDate end;
-    private boolean verdubbeld;
+    private VerdubbelingStatus verdubbeling;
     private int[] gedeeld;
-    private int prijs;
-    private String status;
+    private LengteStatus lengte;
+    private AbonnementStatus status;
 
     public Abonnement(){
         gedeeld = new int[2];
     }
 
-    public Abonnement(int id, int abonneeID, Dienst dienst, LocalDate start, LocalDate end, boolean verdubbeld, int[] gedeeld) {
+    public Abonnement(int id, int abonneeID, Dienst dienst, LocalDate start, LocalDate end, VerdubbelingStatus verdubbeling, int[] gedeeld, LengteStatus lengte, AbonnementStatus status) {
         super(id);
         this.abonneeID = abonneeID;
         this.dienst = dienst;
         this.start = start;
         this.end = end;
-        this.verdubbeld = verdubbeld;
+        this.verdubbeling = verdubbeling;
         this.gedeeld = gedeeld;
+        this.lengte = lengte;
+        this.status = status;
     }
 
     public void insert(){
@@ -38,7 +40,7 @@ public class Abonnement extends DomainObject{
 
     @Override
     public String toString(){
-        String returnString = "\n \t id: " + super.toString() + ". aboneeID: " + abonneeID + ". dienst: " + dienst.getNaam() + ". start " + start + ". end " + end + ". prijs " + prijs + ".";
+        String returnString = "\n \t id: " + super.toString() + ". aboneeID: " + abonneeID + ". dienst: " + dienst.getNaam() + ". start " + start + ". end " + end + ".";
         return returnString;
     }
 
@@ -74,14 +76,6 @@ public class Abonnement extends DomainObject{
         this.end = end;
     }
 
-    public boolean isVerdubbeld() {
-        return verdubbeld;
-    }
-
-    public void setVerdubbeld(boolean verdubbeld) {
-        this.verdubbeld = verdubbeld;
-    }
-
     public int[] getGedeeld() {
         return gedeeld;
     }
@@ -90,19 +84,27 @@ public class Abonnement extends DomainObject{
         this.gedeeld = gedeeld;
     }
 
-    public int getPrijs() {
-        return prijs;
+    public VerdubbelingStatus getVerdubbeling() {
+        return verdubbeling;
     }
 
-    public void setPrijs(int prijs) {
-        this.prijs = prijs;
+    public void setVerdubbeling(VerdubbelingStatus verdubbeling) {
+        this.verdubbeling = verdubbeling;
     }
 
-    public String getStatus() {
+    public LengteStatus getLengte() {
+        return lengte;
+    }
+
+    public void setLengte(LengteStatus lengte) {
+        this.lengte = lengte;
+    }
+
+    public AbonnementStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AbonnementStatus status) {
         this.status = status;
     }
 }

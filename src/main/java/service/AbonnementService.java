@@ -1,8 +1,6 @@
 package service;
 
-import domain.Abonnee;
-import domain.Abonnement;
-import domain.Dienst;
+import domain.*;
 import presentation.dto.Verdubbeling;
 
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ public class AbonnementService{
         List<Abonnement> abonnementen = getAbonnementenbyUser(user) ;
         for(Abonnement a : abonnementen){
             if(a.getDienst().getId() == abonnementID){
-                a.setStatus("opgezegd");
+                a.setStatus(AbonnementStatus.OPGEZEGD);
                 a.update();
                 return a;
             }
@@ -46,11 +44,21 @@ public class AbonnementService{
         return null;
     }
 
-    public Abonnement upgradeAbonnement(ActiveUser user, int abonnementID, Verdubbeling verdubbeling){
+    public Abonnement upgradeAbonnement(ActiveUser user, int abonnementID, String verdubbeling){
         List<Abonnement> abonnementen = getAbonnementenbyUser(user) ;
         for(Abonnement a : abonnementen){
             if(a.getDienst().getId() == abonnementID){
-                a.setStatus(verdubbeling.getVerdubbeling());
+                switch (verdubbeling) {
+                    case "standaard":
+                        a.setVerdubbeling(VerdubbelingStatus.STANDAARD);
+                        break;
+                    case "verdubbeld":
+                        a.setVerdubbeling(VerdubbelingStatus.VERDUBBELD);
+                        break;
+                    case "niet-beschikbaar":
+                        a.setVerdubbeling(VerdubbelingStatus.NIETBESCHIKBAAR);
+                        break;
+                }
                 a.update();
                 return a;
             }

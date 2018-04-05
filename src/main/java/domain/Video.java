@@ -7,6 +7,9 @@ public class Video extends Track{
     //    private Date publicationdate;
     private String description;
 
+    public void as(){
+        description.toCharArray();
+    }
     public String getDescription() {
         return description;
     }
