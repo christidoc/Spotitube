@@ -1,22 +1,46 @@
 package domain;
 
+import datasource.AbonneeMapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Abonnee extends DomainObject{
-    //public static AbonneeMapper abonneeMapper = new AbonneeMapper();
+    public static AbonneeMapper abonneeMapper = new AbonneeMapper();
     private String mail;
     private String name;
+    private String password;
     private List<Abonnement> abonnements;
 
     public Abonnee() {
         abonnements = new ArrayList<>();
     }
 
+    public Abonnee(int id, String mail, String name, String password) {
+        super(id);
+        this.mail = mail;
+        this.name = name;
+        this.password = password;
+        abonnements = new ArrayList<>();
+    }
+
+    public static Abonnee getAbonnee(String username){
+        return abonneeMapper.getAbonneeByName(username);
+    }
+
+    public void addAbonnement(Abonnement abonnement){
+        abonnements.add(abonnement);
+    }
 
 
-
-
+    @Override
+    public String toString() {
+        String returnString = super.toString() + " Mail: " + mail + ". Name: " + name + ". Password: " + password + ". ";
+        for(Abonnement a : abonnements){
+            returnString += a.toString();
+        }
+        return returnString;
+    }
 
     public String getMail() {
         return mail;
@@ -32,6 +56,14 @@ public class Abonnee extends DomainObject{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Abonnement> getAbonnements() {

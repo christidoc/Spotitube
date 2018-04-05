@@ -14,6 +14,10 @@ public abstract class DomainObject {
         this.id = id;
     }
 
+    public String toString() {
+        return ("id: " + id + ". ");
+    }
+
     public int getId() {
         return id;
     }

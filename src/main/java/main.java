@@ -1,4 +1,5 @@
 import datasource.MySQLPlaylistDAO;
+import domain.Abonnee;
 import domain.Playlist;
 import domain.User;
 
@@ -28,7 +29,9 @@ public class main {
 //        playlist.setOwner(user);
 //        playlist.setName("Updated");
 //        playlist.update();
-        int[] ar = new int[3];
-        System.out.println(ar[2]);
+//        int[] ar = new int[3];
+//        System.out.println(ar[2]);
+        Abonnee abonnee = new Abonnee(1, "iets@wat.nl", "Christidoc", "wachtwoord");
+        System.out.println(abonnee.toString());
     }
 }

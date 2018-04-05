@@ -1,22 +1,24 @@
 package domain;
 import datasource.AbonnementMapper;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Abonnement extends DomainObject{
-    public static AbonnementMapper AbonnementMapper = new AbonnementMapper();
+    public static AbonnementMapper abonnementMapper = new AbonnementMapper();
     private int abonneeID;
     private Dienst dienst;
-    private Date start;
-    private Date end;
+    private LocalDate start;
+    private LocalDate end;
     private boolean verdubbeld;
     private int[] gedeeld;
+    private int prijs;
+    private String status;
 
     public Abonnement(){
         gedeeld = new int[2];
     }
 
-    public Abonnement(int id, int abonneeID, Dienst dienst, Date start, Date end, boolean verdubbeld, int[] gedeeld) {
+    public Abonnement(int id, int abonneeID, Dienst dienst, LocalDate start, LocalDate end, boolean verdubbeld, int[] gedeeld) {
         super(id);
         this.abonneeID = abonneeID;
         this.dienst = dienst;
@@ -24,6 +26,20 @@ public class Abonnement extends DomainObject{
         this.end = end;
         this.verdubbeld = verdubbeld;
         this.gedeeld = gedeeld;
+    }
+
+    public void insert(){
+        abonnementMapper.insert(this);
+    }
+
+    public void update(){
+        abonnementMapper.update(this);
+    }
+
+    @Override
+    public String toString(){
+        String returnString = "\n \t id: " + super.toString() + ". aboneeID: " + abonneeID + ". dienst: " + dienst.getNaam() + ". start " + start + ". end " + end + ". prijs " + prijs + ".";
+        return returnString;
     }
 
     public int getAbonneeID() {
@@ -42,19 +58,19 @@ public class Abonnement extends DomainObject{
         this.dienst = dienst;
     }
 
-    public Date getStart() {
+    public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDate start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDate getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDate end) {
         this.end = end;
     }
 
@@ -72,5 +88,21 @@ public class Abonnement extends DomainObject{
 
     public void setGedeeld(int[] gedeeld) {
         this.gedeeld = gedeeld;
+    }
+
+    public int getPrijs() {
+        return prijs;
+    }
+
+    public void setPrijs(int prijs) {
+        this.prijs = prijs;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

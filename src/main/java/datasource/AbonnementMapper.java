@@ -8,8 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AbonnementMapper extends AbstractMapper {
@@ -40,8 +40,8 @@ public class AbonnementMapper extends AbstractMapper {
     protected DomainObject doLoad(int id, ResultSet rs) throws SQLException {
         Dienst dienst = Dienst.getDienst(rs.getInt("dienstID"));
         int abonneeID = rs.getInt("abonneeID");
-        Date startdatum = rs.getDate("startdatum");
-        Date einddatum = rs.getDate("einddatum");
+        LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
+        LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
         boolean verdubbeld = rs.getBoolean("verdubbeld");
         int[] gedeeld = new int[2];
         return new Abonnement(id, abonneeID, dienst, startdatum, einddatum, verdubbeld, gedeeld);
@@ -53,8 +53,8 @@ public class AbonnementMapper extends AbstractMapper {
             if(id == rs.getInt("abonneeID") || id == 0) {
                 int abonnementID = rs.getInt("id");
                 Dienst dienst = Dienst.getDienst(rs.getInt("dienstID"));
-                Date startdatum = rs.getDate("startdatum");
-                Date einddatum = rs.getDate("einddatum");
+                LocalDate startdatum = rs.getDate("startdatum").toLocalDate();
+                LocalDate einddatum = rs.getDate("einddatum").toLocalDate();
                 boolean verdubbeld = rs.getBoolean("verdubbeld");
                 int[] gedeeld = new int[2];
                 returnList.add(new Abonnement(abonnementID, id, dienst, startdatum, einddatum, verdubbeld, gedeeld));
@@ -68,8 +68,8 @@ public class AbonnementMapper extends AbstractMapper {
         abonnement.setId(findNextDatabaseId());
         insertStatement.setInt(1, abonnement.getAbonneeID());
         insertStatement.setInt(2, abonnement.getDienst().getId());
-        //insertStatement.setDate(3, abonnement.getStart());
-        //insertStatement.setDate(4, abonnement.getEnd());
+        insertStatement.setDate(3, java.sql.Date.valueOf(abonnement.getStart()));
+        insertStatement.setDate(4, java.sql.Date.valueOf(abonnement.getEnd()));
         insertStatement.setBoolean(5, abonnement.isVerdubbeld());
     }
 
@@ -90,9 +90,9 @@ public class AbonnementMapper extends AbstractMapper {
         }
     }
 
-    public List<Abonnement> getAllAbonnementen(int aboneeID){
+    public List<Abonnement> getAllAbonnementen(int abonneeID){
         List<Abonnement> returnlist = new ArrayList<>();
-        for(DomainObject o : findAll(aboneeID)){
+        for(DomainObject o : findAll(abonneeID)){
             returnlist.add((Abonnement) o);
         }
         return returnlist;
