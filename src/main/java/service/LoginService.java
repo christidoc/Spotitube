@@ -1,18 +1,13 @@
 package service;
 
-import datasource.UserDAO;
 import domain.Abonnee;
-import domain.User;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoginService {
-    @Inject
-    UserDAO mySQLUserDAO;
-    @Inject
-    TokenService tokenService;
+    TokenService tokenService = new TokenService();
     private static ArrayList<ActiveUser> users = new ArrayList<>();
 
     public LoginService(){}

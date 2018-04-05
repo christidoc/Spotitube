@@ -15,9 +15,9 @@ import java.util.List;
 
 @Path("/abonnees")
 public class AbonneeAPI {
-    LoginService loginService;
-    AbonneeService abonneeService;
-    AbonnementService abonnementService;
+    LoginService loginService = new LoginService();
+    AbonneeService abonneeService = new AbonneeService();
+    AbonnementService abonnementService = new AbonnementService();
 
     @Path("/")
     @GET

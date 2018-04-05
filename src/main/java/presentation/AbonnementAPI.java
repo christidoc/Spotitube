@@ -13,8 +13,8 @@ import java.util.List;
 
 @Path("/abonnementen")
 public class AbonnementAPI {
-    LoginService loginService;
-    AbonnementService abonnementService;
+    LoginService loginService = new LoginService();
+    AbonnementService abonnementService = new AbonnementService();
 
     @Path("/")
     @GET

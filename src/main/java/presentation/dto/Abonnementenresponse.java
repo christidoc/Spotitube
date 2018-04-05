@@ -2,6 +2,7 @@ package presentation.dto;
 
 import domain.Abonnement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Abonnementenresponse {
@@ -9,6 +10,7 @@ public class Abonnementenresponse {
     private double totalPrice;
 
     public Abonnementenresponse (List<Abonnement> abonnements){
+        abonnementen = new ArrayList<>();
         for(Abonnement abonnement : abonnements){
             abonnementen.add(new AbonnementDTO(abonnement.getDienst().getId(), abonnement.getDienst().getAanbieder(), abonnement.getDienst().getNaam()));
             switch (abonnement.getLengte()) {
