@@ -9,7 +9,7 @@ import java.util.List;
 public class main {
     public static void main (String [] args){
         AbonnementService abonnementService = new AbonnementService();
-        List<Dienst> diensten = abonnementService.getAvailableAbonnementen("vodafone");
+        List<Dienst> diensten = abonnementService.getAvailableAbonnementen("");
         for(Dienst d : diensten){
             System.out.println(d.toString());
         }

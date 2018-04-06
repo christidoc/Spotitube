@@ -47,7 +47,7 @@ public class AbonnementAPI {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Abonnementresponse getPlaylist (@PathParam("id") int abonnementID,
+    public Abonnementresponse getAbonnement (@PathParam("id") int abonnementID,
                                             @QueryParam("token") String token) {
         ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
@@ -61,7 +61,7 @@ public class AbonnementAPI {
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Abonnementresponse editPlaylist (@PathParam("id") int abonnementID,
+    public Abonnementresponse terminateAbonnement (@PathParam("id") int abonnementID,
                                             @QueryParam("token") String token) {
         ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
@@ -75,7 +75,7 @@ public class AbonnementAPI {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Abonnementresponse editPlaylist (@PathParam("id") int abonnementID,
+    public Abonnementresponse editAbonnement (@PathParam("id") int abonnementID,
                                             @QueryParam("token") String token,
                                             Verdubbeling verdubbeling) {
         ActiveUser user = loginService.getActiveUser(token);
@@ -89,12 +89,13 @@ public class AbonnementAPI {
     @Path("/all/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public AvailableAbonnementenresponse getAvailableAbonnementen(@QueryParam("token") String token,
+    public List<AbonnementDTO> getAvailableAbonnementen(@QueryParam("token") String token,
                                                          @QueryParam("filter") String filter) {
         ActiveUser user = loginService.getActiveUser(token);
         if(user != null) {
             List<Dienst> diensten = abonnementService.getAvailableAbonnementen(filter);
-            return new AvailableAbonnementenresponse(diensten);
+            AvailableAbonnementenresponse availableAbonnementenresponse = new AvailableAbonnementenresponse(diensten);
+            return availableAbonnementenresponse.getAbonnementen();
         }
         return null;
     }

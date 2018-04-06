@@ -7,10 +7,16 @@ public class AbonnementDTO {
     private String aanbieder;
     private String dienst;
 
+    public AbonnementDTO(){}
+
     public AbonnementDTO(int id, AanbiederStatus aanbiederStatus, String dienst) {
         this.id = id;
         this.aanbieder = aanbiederStatus.getName();
         this.dienst = dienst;
+    }
+
+    public String toString(){
+        return "id: " + id + ". aanbieder: " + aanbieder + ". dienst: " + dienst;
     }
 
     public int getId() {

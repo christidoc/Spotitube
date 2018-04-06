@@ -19,12 +19,15 @@ public class AbonnementService{
         Abonnement abonnement = new Abonnement();
         abonnement.setAbonneeID(abonnee.getId());
         abonnement.setDienst(dienst);
-        //Wegens gebrek aan informatie uit de front-end zijn hier wat default values.
-        abonnement.setStart(LocalDate.now());
+        abonnement.setStart(LocalDate.now().withDayOfMonth(1));
         abonnement.setEnd(abonnement.getStart().plusMonths(1));
-        abonnement.setVerdubbeling(VerdubbelingStatus.STANDAARD);
+        if(dienst.isVerdubbeling()) {
+            abonnement.setVerdubbeling(VerdubbelingStatus.STANDAARD);
+        } else {
+            abonnement.setVerdubbeling(VerdubbelingStatus.NIETBESCHIKBAAR);
+        }
         abonnement.setLengte(LengteStatus.MAAND);
-        abonnement.setStatus(AbonnementStatus.ACTIEF);
+        abonnement.setStatus(AbonnementStatus.PROEF);
         abonnee.addAbonnement(abonnement);
     }
 
@@ -40,10 +43,10 @@ public class AbonnementService{
         return null;
     }
 
-    public Abonnement getAbonnementbyUser(ActiveUser user, int abonnementID){
+    public Abonnement getAbonnementbyUser(ActiveUser user, int dienstID){
         List<Abonnement> abonnementen = getAbonnementenbyUser(user);
         for(Abonnement a : abonnementen){
-            if(a.getDienst().getId() == abonnementID){
+            if(a.getDienst().getId() == dienstID){
                 return a;
             }
         }
@@ -86,8 +89,8 @@ public class AbonnementService{
         return diensten;
     }
 
-    public void shareAbonnement(ActiveUser user, int abonnementID, int abonneeID){
-        Abonnement abonnement = getAbonnementbyUser(user, abonnementID);
+    public void shareAbonnement(ActiveUser user, int dienstID, int abonneeID){
+        Abonnement abonnement = getAbonnementbyUser(user, dienstID);
         abonnement.addDeling(abonneeID);
     }
 }

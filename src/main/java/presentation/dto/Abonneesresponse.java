@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Abonneesresponse {
-    private List<AbonneeDTO> abonnees;
+    private List<AbonneeDTO> abonnees = new ArrayList<>();
 
     public Abonneesresponse(){
-        abonnees = new ArrayList<>();
     }
 
     public Abonneesresponse(List<Abonnee> abonnees) {
-        this.abonnees = new ArrayList<>();
         for(Abonnee a : abonnees){
             this.abonnees.add(new AbonneeDTO(a.getId(), a.getName(), a.getMail()));
         }

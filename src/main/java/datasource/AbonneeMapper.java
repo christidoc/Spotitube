@@ -44,7 +44,6 @@ public class AbonneeMapper  extends AbstractMapper{
     }
 
     protected List<DomainObject> doLoadAll(int id, ResultSet rs) throws  SQLException{
-        System.out.println("doLoadAll");
         List<DomainObject> returnList = new ArrayList<>();
         while (rs.next()) {
             int domainObjectID = rs.getInt("id");

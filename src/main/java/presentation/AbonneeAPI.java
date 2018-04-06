@@ -2,6 +2,7 @@ package presentation;
 
 import domain.Abonnee;
 import domain.AbonnementStatus;
+import presentation.dto.AbonneeDTO;
 import presentation.dto.Abonneesresponse;
 import presentation.dto.ShareRequest;
 import service.AbonneeService;
@@ -11,6 +12,7 @@ import service.LoginService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/abonnees")
@@ -22,26 +24,28 @@ public class AbonneeAPI {
     @Path("/")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Abonneesresponse getAbonnees(@QueryParam("token") String token) {
+    public List<AbonneeDTO> getAbonnees(@QueryParam("token") String token) {
         ActiveUser user = loginService.getActiveUser(token);
         if (user != null) {
             List<Abonnee> abonnees = abonneeService.getAllAbonees();
-            return new Abonneesresponse(abonnees);
+            Abonneesresponse abonneesresponse = new Abonneesresponse(abonnees);
+            return abonneesresponse.getAbonnees();
         }
         return null;
     }
 
     @Path("/{id}")
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public int shareAbonnement(@PathParam("id") int abonneeID,
+    public Response shareAbonnement(@PathParam("id") int abonneeID,
                                @QueryParam("token") String token,
                                ShareRequest shareRequest) {
         ActiveUser user = loginService.getActiveUser(token);
         if (user != null) {
             abonnementService.shareAbonnement(user, shareRequest.getId(), abonneeID);
-            return 200;
+            return Response.ok().build();
         }
-        return 0;
+        return Response.serverError().build();
     }
 }

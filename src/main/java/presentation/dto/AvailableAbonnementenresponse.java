@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AvailableAbonnementenresponse {
-    private List<AbonnementDTO> abonnementen;
+    private List<AbonnementDTO> abonnementen = new ArrayList<>();
 
     public AvailableAbonnementenresponse (List<Dienst> diensten){
-        abonnementen = new ArrayList<>();
+//        abonnementen = new ArrayList<AbonnementDTO>();
         for(Dienst dienst : diensten){
             abonnementen.add(new AbonnementDTO(dienst.getId(), dienst.getAanbieder(), dienst.getNaam()));
         }
